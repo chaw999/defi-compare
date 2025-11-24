@@ -68,7 +68,7 @@ function normalizeDeBank(chainData) {
       if (item.detail && item.detail.supply_token_list) {
         item.detail.supply_token_list.forEach(token => {
           protocols[protoName].assets.push({
-            symbol: token.symbol,
+            symbol: token.symbol.trim(), // Normalize symbol
             amount: token.amount,
             price: token.price,
             value: (token.amount * token.price),
@@ -79,7 +79,7 @@ function normalizeDeBank(chainData) {
       if (item.detail && item.detail.borrow_token_list) {
         item.detail.borrow_token_list.forEach(token => {
           protocols[protoName].assets.push({
-            symbol: token.symbol,
+            symbol: token.symbol.trim(), // Normalize symbol
             amount: token.amount,
             price: token.price,
             value: (token.amount * token.price) * -1, // Debt is negative value in this context? Or just track amount.
@@ -87,7 +87,21 @@ function normalizeDeBank(chainData) {
           });
         });
       }
-      // TODO: Rewards, etc.
+      if (item.detail && item.detail.reward_token_list) {
+        item.detail.reward_token_list.forEach(token => {
+          // Normalize symbols for DeBank too
+          let symbol = token.symbol.trim();
+          // if (symbol === 'WAVAX') symbol = 'AVAX'; // Normalize WAVAX -> AVAX
+
+          protocols[protoName].assets.push({
+            symbol: symbol,
+            amount: token.amount,
+            price: token.price,
+            value: (token.amount * token.price),
+            type: 'reward'
+          });
+        });
+      }
     });
   });
 
@@ -136,13 +150,23 @@ function normalizeZerion(chainDataRaw) {
     totalValue += val;
 
     let type = attrs.position_type;
-    // Fix: Zerion 'locked' is equivalent to DeBank 'supply'
-    if (type === 'locked') {
+    // Fix: Zerion 'locked' and 'staked' is equivalent to DeBank 'supply'
+    if (type === 'locked' || type === 'staked') {
       type = 'supply';
     }
 
+    let symbol = attrs.fungible_info?.symbol || '?';
+    // Normalize symbols
+    symbol = symbol.trim();
+
+    // Fix: Avalanche Aave uses AVAX for Wrapped AVAX in Zerion, but WAVAX in DeBank
+    // We standardize to AVAX to match Zerion's usage in this context for better matching
+    // if (symbol === 'WAVAX') {
+    //   symbol = 'AVAX';
+    // }
+
     protocols[protoName].assets.push({
-      symbol: attrs.fungible_info?.symbol || '?',
+      symbol: symbol,
       amount: attrs.quantity?.float || 0,
       price: attrs.price || 0,
       value: val,
