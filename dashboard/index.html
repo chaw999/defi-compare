@@ -233,18 +233,38 @@
               <option value="all">🌐 全部网络 (All)</option>
               <option v-for="chain in availableChains" :value="chain">{{ formatChain(chain) }}</option>
             </select>
-          </div>
 
-          <!-- Filter Toggle -->
-          <div class="d-flex gap-3">
-            <a href="test_report.html" class="btn btn-outline-primary btn-sm fw-bold">
-              <i class="fas fa-bug me-2"></i>QA Report
-            </a>
+            <!-- Filter Toggle -->
             <button class="btn btn-sm fw-bold filter-toggle-btn"
               :class="showOnlyDiffs ? 'btn-danger' : 'btn-outline-secondary'" @click="showOnlyDiffs = !showOnlyDiffs">
               <i class="fas" :class="showOnlyDiffs ? 'fa-filter' : 'fa-eye'"></i>
               {{ showOnlyDiffs ? '只看差异' : '显示全部' }}
             </button>
+
+            <!-- Comparison Mode Radios -->
+            <div v-if="showOnlyDiffs" class="d-flex align-items-center gap-3 bg-light rounded px-2 py-1 border">
+              <div class="form-check form-check-inline m-0">
+                <input class="form-check-input" type="radio" id="compareModeFiat" value="fiat" v-model="compareMode">
+                <label class="form-check-label small fw-bold" for="compareModeFiat" 
+                       title="法币金额相差在 1% 或 1 美金以内认为相同">
+                  法币维度
+                </label>
+              </div>
+              <div class="form-check form-check-inline m-0">
+                <input class="form-check-input" type="radio" id="compareModeToken" value="token" v-model="compareMode">
+                <label class="form-check-label small fw-bold" for="compareModeToken" 
+                       title="完整对比代币数量名称一一对应的关系">
+                  代币维度
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side -->
+          <div class="d-flex gap-3">
+            <a href="test_report.html" class="btn btn-outline-primary btn-sm fw-bold">
+              <i class="fas fa-bug me-2"></i>QA Report
+            </a>
           </div>
         </div>
 
@@ -307,6 +327,11 @@
               <div class="d-flex align-items-center gap-2">
                 <span class="badge bg-dark text-white me-2" v-if="proto.chain">{{ formatChain(proto.chain) }}</span>
                 <h5 class="mb-0 fw-bold text-dark">{{ proto.name }}</h5>
+                
+                <!-- Status Badge -->
+                <span v-if="getProtocolStatus(proto)" class="badge ms-2" :class="getProtocolStatus(proto).class">
+                  {{ getProtocolStatus(proto).text }}
+                </span>
               </div>
               <div class="d-flex gap-4 text-end">
                 <div>
@@ -339,10 +364,10 @@
             </div>
 
             <!-- Asset List -->
-            <div v-for="asset in proto.assets" :key="asset.symbol + asset.type"
-              class="asset-row row g-0 px-3 py-2 align-items-center" :class="{ 'is-diff': asset.hasDiff }">
+            <div v-for="asset in proto.assets" :key="asset.symbol + asset.type">
+              <div v-if="!showOnlyDiffs || asset.hasDiff" class="asset-row row g-0 px-3 py-2 align-items-center"
+                :class="{ 'is-diff': asset.hasDiff }">
 
-              <template v-if="!showOnlyDiffs || asset.hasDiff">
                 <!-- DeBank Side -->
                 <div class="col-6 col-separator pe-3">
                   <div v-if="asset.debank" class="row g-0 align-items-center">
@@ -392,7 +417,8 @@
                     - Zerion 未收录 -
                   </div>
                 </div>
-              </template>
+
+              </div>
             </div>
           </div>
 
@@ -421,7 +447,9 @@
           comparisonData: {},
           selectedAddress: null,
           selectedChain: 'all',
-          showOnlyDiffs: false
+          selectedChain: 'all',
+          showOnlyDiffs: false,
+          compareMode: 'token'
         }
       },
       computed: {
@@ -601,7 +629,7 @@
                     usedZerionIndices.add(typeMatchIdx);
                     const zAsset = zerionAssets[typeMatchIdx];
 
-                    // Calculate diff
+                    // Calculate diff (Token Dimension Default)
                     const amtD = dAsset.amount;
                     const amtZ = zAsset.amount;
                     let hasDiff = false;
@@ -610,7 +638,6 @@
                       const diffPct = Math.abs(amtD - amtZ) / Math.max(Math.abs(amtD), Math.abs(amtZ));
                       if (diffPct > 0.01) {
                         // If diff > 1%, check if value diff is significant (> $0.01)
-                        // If value diff is tiny, ignore it as non-diff
                         const valD = dAsset.value || 0;
                         const valZ = zAsset.value || 0;
                         if (Math.abs(valD - valZ) > 0.01) {
@@ -628,17 +655,9 @@
                     });
                   } else {
                     // Truly unmatched (DeBank has it, Zerion does not)
-                    // If DeBank value is tiny (< $0.01), can we hide it?
-                    // User request: "if debank has it but zerion misses it, still show it."
-                    // User request: "if fiat value < 0.01, can hide it." -> Assuming this applies to diffs generally?
-                    // "如果法币金额小于 0.01 也可以直接隐藏" -> implies if the item itself is dust, hide it.
-
                     const valD = dAsset.value || 0;
                     if (Math.abs(valD) < 0.01) {
-                      // Hide dust asset if unmatched?
-                      // Or just mark hasDiff=false?
-                      // User said "can directly hide" (可以直接隐藏)
-                      // So we don't push to finalAssets
+                      // Hide dust asset if unmatched
                     } else {
                       finalAssets.push({
                         symbol: symbol,
@@ -673,14 +692,55 @@
 
             proto.assets = finalAssets.sort((a, b) => (b.debank?.value || b.zerion?.value || 0) - (a.debank?.value || a.zerion?.value || 0));
 
-            /* Old Logic
-            proto.assets = Object.values(assetMap).map(item => {
-              // ...
-            }).sort((a, b) => (b.debank?.value || 0) - (a.debank?.value || 0));
-            */
-
             proto.debankTotal = proto.debank ? proto.debank.value : 0;
-            proto.zerionTotal = proto.zerion ? proto.zerion.value : 0;
+            
+            // Calculate Zerion Total (Net Value = Supply - Borrow)
+            // User request: "If loan type, subtract from total"
+            let zNetTotal = 0;
+            proto.assets.forEach(a => {
+              if (a.zerion) {
+                const zType = this.standardizeType(a.zerion.type);
+                const zVal = a.zerion.value || 0;
+                if (zType === 'borrow') {
+                  zNetTotal -= zVal;
+                } else {
+                  zNetTotal += zVal;
+                }
+              }
+            });
+            proto.zerionTotal = zNetTotal;
+
+            // --- Fiat Dimension Override Logic ---
+            if (this.compareMode === 'fiat') {
+              const totalD = proto.debankTotal;
+              const totalZ = proto.zerionTotal;
+              const totalDiff = Math.abs(totalD - totalZ);
+              const totalMax = Math.max(Math.abs(totalD), Math.abs(totalZ)) || 1;
+              const totalDiffPct = totalDiff / totalMax;
+
+              if (totalDiff <= 1 || totalDiffPct <= 0.01) {
+                // Protocol matches in Fiat Dimension!
+                // Clear all diffs
+                proto.assets.forEach(a => a.hasDiff = false);
+              } else {
+                // Protocol differs. Highlight assets based on Value Diff.
+                proto.assets.forEach(a => {
+                  const valD = a.debank?.value || 0;
+                  const valZ = a.zerion?.value || 0;
+                  const valDiff = Math.abs(valD - valZ);
+                  const valMax = Math.max(Math.abs(valD), Math.abs(valZ)) || 1;
+                  const valDiffPct = valDiff / valMax;
+
+                  // Mark as diff if value diff is significant
+                  if (valDiff > 1 && valDiffPct > 0.01) {
+                    a.hasDiff = true;
+                  } else {
+                    a.hasDiff = false;
+                  }
+                });
+              }
+            }
+            // -------------------------------------
 
             return proto;
           });
@@ -722,6 +782,26 @@
           if (num === undefined || num === null) return '-';
           if (Math.abs(num) < 0.0001 && num !== 0) return '<0.0001';
           return num.toLocaleString('en-US', { maximumFractionDigits: decimals });
+        },
+        getProtocolStatus(proto) {
+          if (!proto || !proto.assets || proto.assets.length === 0) return null;
+          
+          const total = proto.assets.length;
+          const diffs = proto.assets.filter(a => a.hasDiff).length;
+
+          if (diffs === 0) return null;
+
+          if (diffs === total) {
+            return {
+              text: '所有数据不同',
+              class: 'bg-danger text-white'
+            };
+          } else {
+            return {
+              text: '部分数据不同',
+              class: 'bg-warning text-dark'
+            };
+          }
         }
       }
     }).mount('#app');
