@@ -237,6 +237,9 @@
 
           <!-- Filter Toggle -->
           <div class="d-flex gap-3">
+            <a href="test_report.html" class="btn btn-outline-primary btn-sm fw-bold">
+              <i class="fas fa-bug me-2"></i>QA Report
+            </a>
             <button class="btn btn-sm fw-bold filter-toggle-btn"
               :class="showOnlyDiffs ? 'btn-danger' : 'btn-outline-secondary'" @click="showOnlyDiffs = !showOnlyDiffs">
               <i class="fas" :class="showOnlyDiffs ? 'fa-filter' : 'fa-eye'"></i>
@@ -254,8 +257,10 @@
                 <div class="d-flex justify-content-between">
                   <div>
                     <div class="d-flex align-items-center gap-2 mb-1">
-                       <div class="small text-uppercase text-warning fw-bold">DeBank 总资产</div>
-                       <a :href="'https://debank.com/profile/' + selectedAddress" target="_blank" class="text-secondary small" title="Go to DeBank Profile"><i class="fas fa-external-link-alt"></i></a>
+                      <div class="small text-uppercase text-warning fw-bold">DeBank 总资产</div>
+                      <a :href="'https://debank.com/profile/' + selectedAddress" target="_blank"
+                        class="text-secondary small" title="Go to DeBank Profile"><i
+                          class="fas fa-external-link-alt"></i></a>
                     </div>
                     <div class="h2 mb-0 fw-bold text-dark">${{ formatMoney(totals.debank) }}</div>
                   </div>
@@ -273,7 +278,9 @@
                   <div>
                     <div class="d-flex align-items-center gap-2 mb-1">
                       <div class="small text-uppercase text-primary fw-bold">Zerion 总资产</div>
-                      <a :href="'https://app.zerion.io/' + selectedAddress + '/overview'" target="_blank" class="text-secondary small" title="Go to Zerion Portfolio"><i class="fas fa-external-link-alt"></i></a>
+                      <a :href="'https://app.zerion.io/' + selectedAddress + '/overview'" target="_blank"
+                        class="text-secondary small" title="Go to Zerion Portfolio"><i
+                          class="fas fa-external-link-alt"></i></a>
                     </div>
                     <div class="h2 mb-0 fw-bold text-dark">${{ formatMoney(totals.zerion) }}</div>
                   </div>
@@ -607,7 +614,7 @@
                         const valD = dAsset.value || 0;
                         const valZ = zAsset.value || 0;
                         if (Math.abs(valD - valZ) > 0.01) {
-                           hasDiff = true;
+                          hasDiff = true;
                         }
                       }
                     }
@@ -625,21 +632,21 @@
                     // User request: "if debank has it but zerion misses it, still show it."
                     // User request: "if fiat value < 0.01, can hide it." -> Assuming this applies to diffs generally?
                     // "如果法币金额小于 0.01 也可以直接隐藏" -> implies if the item itself is dust, hide it.
-                    
+
                     const valD = dAsset.value || 0;
                     if (Math.abs(valD) < 0.01) {
-                       // Hide dust asset if unmatched?
-                       // Or just mark hasDiff=false?
-                       // User said "can directly hide" (可以直接隐藏)
-                       // So we don't push to finalAssets
+                      // Hide dust asset if unmatched?
+                      // Or just mark hasDiff=false?
+                      // User said "can directly hide" (可以直接隐藏)
+                      // So we don't push to finalAssets
                     } else {
-                       finalAssets.push({
-                         symbol: symbol,
-                         type: dAsset.rawType,
-                         debank: dAsset,
-                         zerion: null,
-                         hasDiff: true
-                       });
+                      finalAssets.push({
+                        symbol: symbol,
+                        type: dAsset.rawType,
+                        debank: dAsset,
+                        zerion: null,
+                        hasDiff: true
+                      });
                     }
                   }
                 }
@@ -648,18 +655,18 @@
               // Add remaining Zerion assets
               zerionAssets.forEach((zAsset, idx) => {
                 if (!usedZerionIndices.has(idx)) {
-                   const valZ = zAsset.value || 0;
-                   if (Math.abs(valZ) < 0.01) {
-                      // Hide dust asset from Zerion side too if unmatched
-                   } else {
-                      finalAssets.push({
-                        symbol: symbol,
-                        type: zAsset.rawType,
-                        debank: null,
-                        zerion: zAsset,
-                        hasDiff: true
-                      });
-                   }
+                  const valZ = zAsset.value || 0;
+                  if (Math.abs(valZ) < 0.01) {
+                    // Hide dust asset from Zerion side too if unmatched
+                  } else {
+                    finalAssets.push({
+                      symbol: symbol,
+                      type: zAsset.rawType,
+                      debank: null,
+                      zerion: zAsset,
+                      hasDiff: true
+                    });
+                  }
                 }
               });
             });

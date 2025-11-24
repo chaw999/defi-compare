@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeFi 数据一致性 QA 测试报告</title>
+  <!-- Bootstrap 5 & Dark Mode -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    :root {
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --border-color: #e2e8f0;
+      
+      --accent-primary: #3b82f6;
+      --accent-danger: #ef4444;
+      --accent-success: #22c55e;
+      --accent-warning: #f59e0b;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      margin-bottom: 24px;
+      border-radius: 12px;
+    }
+
+    .stat-card {
+      transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      background-color: #f1f5f9;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    .table {
+      color: var(--text-primary);
+      --bs-table-bg: transparent;
+      --bs-table-border-color: var(--border-color);
+    }
+
+    .table thead th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .badge-risk-high {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .badge-risk-med {
+      background-color: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    .action-item {
+      border-left: 4px solid var(--accent-warning);
+      background: #fffbeb;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .action-item.critical {
+      border-left-color: var(--accent-danger);
+      background: #fef2f2;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1; 
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8; 
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" class="container-fluid py-4 px-4">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-end mb-5 border-bottom pb-3">
+      <div>
+        <h1 class="display-5 mb-1 text-dark"><i class="fas fa-bug me-3 text-danger"></i>一致性 QA 测试报告</h1>
+        <p class="text-secondary mb-0 mono">DeBank vs Zerion 数据分析</p>
+      </div>
+      <div class="text-end">
+        <a href="index.html" class="btn btn-outline-primary btn-sm mb-2"><i class="fas fa-arrow-left me-2"></i>返回仪表盘</a>
+        <div class="text-secondary small mono">生成时间: {{ new Date().toLocaleString('zh-CN') }}</div>
+      </div>
+    </div>
+
+    <!-- Overview Stats -->
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card stat-card p-3 h-100">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="text-secondary small text-uppercase fw-bold mb-1">测试地址总数</div>
+              <div class="h2 mb-0 fw-bold">{{ Object.keys(reportData).length }}</div>
+            </div>
+            <i class="fas fa-users fa-2x text-primary opacity-25"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stat-card p-3 h-100 border-danger">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="text-secondary small text-uppercase fw-bold mb-1">差异总数</div>
+              <div class="h2 mb-0 fw-bold text-danger">{{ totalIssues }}</div>
+              <small class="text-danger opacity-75">发现的资产不匹配项</small>
+            </div>
+            <i class="fas fa-exclamation-circle fa-2x text-danger opacity-25"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stat-card p-3 h-100">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="text-secondary small text-uppercase fw-bold mb-1">价值差异</div>
+              <div class="h2 mb-0 fw-bold text-warning">${{ formatMoney(totalValueGap) }}</div>
+              <small class="text-secondary">总 USD 差额</small>
+            </div>
+            <i class="fas fa-dollar-sign fa-2x text-warning opacity-25"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stat-card p-3 h-100">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="text-secondary small text-uppercase fw-bold mb-1">通过率</div>
+              <div class="h2 mb-0 fw-bold" :class="passRate > 90 ? 'text-success' : 'text-warning'">{{ passRate }}%</div>
+              <small class="text-secondary">无重大问题的地址比例</small>
+            </div>
+            <i class="fas fa-chart-pie fa-2x opacity-25" :class="passRate > 90 ? 'text-success' : 'text-warning'"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      
+      <!-- Left Column: Charts & Analysis -->
+      <div class="col-md-8">
+        
+        <!-- Charts Row -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header">按链分布差异 (Discrepancies by Chain)</div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="chainChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header">问题协议排行 (Top Problematic Protocols)</div>
+              <div class="card-body">
+                <div class="chart-container">
+                  <canvas id="protocolChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Issue List -->
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-list-ul me-2"></i>高优先级问题列表</span>
+            <span class="badge bg-danger">{{ highPriorityIssues.length }} 个问题 > $10</span>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0 align-middle">
+                <thead>
+                  <tr>
+                    <th class="ps-4">地址 / 链</th>
+                    <th>协议</th>
+                    <th>资产</th>
+                    <th class="text-end">DeBank 价值</th>
+                    <th class="text-end">Zerion 价值</th>
+                    <th class="text-end pe-4">差额 (USD)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="issue in highPriorityIssues.slice(0, 10)" :key="issue.id">
+                    <td class="ps-4">
+                      <div class="mono small text-primary">{{ formatAddress(issue.address) }}</div>
+                      <div class="badge bg-dark border border-secondary text-secondary mt-1" style="font-size: 0.6rem;">{{ issue.chain }}</div>
+                    </td>
+                    <td class="fw-bold">{{ issue.protocol }}</td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="fw-bold">{{ issue.symbol }}</span>
+                        <span class="badge bg-secondary opacity-50" style="font-size: 0.6rem;">{{ issue.type }}</span>
+                      </div>
+                    </td>
+                    <td class="text-end mono text-secondary">${{ formatMoney(issue.debankVal) }}</td>
+                    <td class="text-end mono text-secondary">${{ formatMoney(issue.zerionVal) }}</td>
+                    <td class="text-end pe-4 mono text-danger fw-bold">
+                      {{ issue.debankVal > issue.zerionVal ? '-' : '+' }}${{ formatMoney(Math.abs(issue.diff)) }}
+                    </td>
+                  </tr>
+                  <tr v-if="highPriorityIssues.length === 0">
+                    <td colspan="6" class="text-center py-5 text-secondary">
+                      <i class="fas fa-check-circle fa-2x mb-3 text-success"></i>
+                      <p>未发现高优先级问题！</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="p-3 text-center border-top border-secondary" v-if="highPriorityIssues.length > 10">
+              <small class="text-secondary">显示前 10 个，共 {{ highPriorityIssues.length }} 个问题</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: QA Action Items -->
+      <div class="col-md-4">
+        
+        <!-- Action Plan -->
+        <div class="card mb-4">
+          <div class="card-header border-warning text-warning"><i class="fas fa-clipboard-check me-2"></i>QA 行动建议</div>
+          <div class="card-body">
+            <div v-if="actionItems.length === 0" class="text-success text-center py-4">
+              <i class="fas fa-check-circle fa-3x mb-3"></i>
+              <h5>系统健康</h5>
+              <p class="small text-secondary">无需特别行动。</p>
+            </div>
+            <div v-else>
+              <div v-for="(item, idx) in actionItems" :key="idx" class="action-item" :class="{ critical: item.critical }">
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="fw-bold small text-uppercase" :class="item.critical ? 'text-danger' : 'text-warning'">
+                    {{ item.type }}
+                  </span>
+                  <span class="badge bg-dark">{{ item.count }} 处受影响</span>
+                </div>
+                <p class="mb-1 small fw-bold">{{ item.title }}</p>
+                <p class="mb-0 small text-secondary" style="font-size: 0.8rem;">{{ item.desc }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Missing Tokens -->
+        <div class="card">
+          <div class="card-header">缺失资产分析</div>
+          <div class="card-body p-0">
+             <ul class="list-group list-group-flush">
+               <li v-for="(stat, token) in missingTokenStats" :key="token" class="list-group-item bg-transparent text-dark d-flex justify-content-between align-items-center">
+                 <div class="d-flex align-items-center gap-2">
+                   <span class="fw-bold">{{ token }}</span>
+                 </div>
+                 <div class="text-end">
+                    <div class="badge bg-danger mb-1">{{ stat.count }} 次失败</div>
+                    <div class="small text-secondary" style="font-size: 0.7rem;">最大差异: ${{ formatMoney(stat.maxDiff) }}</div>
+                 </div>
+               </li>
+             </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Vue 3 -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          reportData: {},
+          issues: [],
+          chartInstances: {}
+        }
+      },
+      computed: {
+        totalIssues() {
+          return this.issues.length;
+        },
+        totalValueGap() {
+          return this.issues.reduce((acc, curr) => acc + Math.abs(curr.diff), 0);
+        },
+        passRate() {
+          if (Object.keys(this.reportData).length === 0) return 0;
+          const failedAddrs = new Set(this.highPriorityIssues.map(i => i.address));
+          const total = Object.keys(this.reportData).length;
+          return Math.round(((total - failedAddrs.size) / total) * 100);
+        },
+        highPriorityIssues() {
+          // Filter issues with > $10 diff
+          return this.issues.filter(i => Math.abs(i.diff) > 10).sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff));
+        },
+        actionItems() {
+          const items = [];
+          
+          // Group issues by protocol
+          const protoIssues = {};
+          this.highPriorityIssues.forEach(i => {
+            if (!protoIssues[i.protocol]) protoIssues[i.protocol] = 0;
+            protoIssues[i.protocol]++;
+          });
+
+          Object.entries(protoIssues).forEach(([proto, count]) => {
+            if (count > 2) {
+               items.push({
+                 type: '协议集成',
+                 critical: true,
+                 title: `检查 ${proto} 协议`,
+                 desc: `发现 ${count} 个重大差异。请检查适配器或映射逻辑。`,
+                 count: count
+               });
+            }
+          });
+
+          // Check specific chains
+          const chainIssues = {};
+          this.highPriorityIssues.forEach(i => {
+             if (!chainIssues[i.chain]) chainIssues[i.chain] = 0;
+             chainIssues[i.chain]++;
+          });
+          
+          Object.entries(chainIssues).forEach(([chain, count]) => {
+             if (count > 5) {
+                items.push({
+                  type: '公链稳定性',
+                  critical: false,
+                  title: `审计 ${chain} 数据`,
+                  desc: `${chain} 链失败率较高。请验证 RPC 或索引器延迟。`,
+                  count: count
+                });
+             }
+          });
+
+          return items.sort((a, b) => b.critical - a.critical);
+        },
+        missingTokenStats() {
+           const stats = {};
+           this.highPriorityIssues.forEach(i => {
+              if (!stats[i.symbol]) stats[i.symbol] = { count: 0, maxDiff: 0 };
+              stats[i.symbol].count++;
+              if (Math.abs(i.diff) > stats[i.symbol].maxDiff) stats[i.symbol].maxDiff = Math.abs(i.diff);
+           });
+           
+           // Return top 5
+           return Object.fromEntries(
+              Object.entries(stats)
+              .sort(([,a], [,b]) => b.count - a.count)
+              .slice(0, 5)
+           );
+        }
+      },
+      mounted() {
+        this.loadData();
+      },
+      methods: {
+        async loadData() {
+          try {
+            const response = await fetch('./comparison_data.json');
+            this.reportData = await response.json();
+            this.analyzeData();
+            this.$nextTick(() => {
+              this.renderCharts();
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        },
+        analyzeData() {
+          const allIssues = [];
+          
+          Object.entries(this.reportData).forEach(([address, chainMap]) => {
+             Object.entries(chainMap).forEach(([chain, data]) => {
+                // Use same logic as dashboard to find diffs
+                const protocolsMap = {};
+
+                // Merge Protocol Logic (Simplified for report)
+                // ... (Reuse basic merging structure)
+                // Actually, let's just iterate both lists and find mismatches directly for speed
+                // Or better, replicate the consolidation logic to be accurate
+                
+                // 1. Flatten Protocols
+                const allProtos = new Set([
+                  ...Object.values(data.debank.protocols).map(p => p.name),
+                  ...Object.values(data.zerion.protocols).map(p => p.name)
+                ]);
+
+                allProtos.forEach(pName => {
+                   // Find in both
+                   const pD = Object.values(data.debank.protocols).find(p => p.name === pName);
+                   const pZ = Object.values(data.zerion.protocols).find(p => p.name === pName); // Name matching might be weak if ID differs, but ok for now
+
+                   if (!pD && !pZ) return;
+
+                   // Collect assets
+                   let assetsD = pD ? pD.assets : [];
+                   let assetsZ = pZ ? pZ.assets : [];
+
+                   // Flatten assets to finding diffs
+                   // Using the logic: Group by Symbol -> Match Amounts -> Remainder is Diff
+                   
+                   const symbolMap = {};
+                   assetsD.forEach(a => { 
+                     if(!symbolMap[a.symbol]) symbolMap[a.symbol] = { d: [], z: [] };
+                     symbolMap[a.symbol].d.push(a);
+                   });
+                   assetsZ.forEach(a => {
+                     if(!symbolMap[a.symbol]) symbolMap[a.symbol] = { d: [], z: [] };
+                     symbolMap[a.symbol].z.push(a);
+                   });
+
+                   Object.keys(symbolMap).forEach(sym => {
+                      const group = symbolMap[sym];
+                      // Naive matching for report: Sum totals
+                      const totalD = group.d.reduce((sum, a) => sum + a.amount, 0);
+                      const totalZ = group.z.reduce((sum, a) => sum + a.amount, 0);
+                      const valD = group.d.reduce((sum, a) => sum + a.value, 0);
+                      const valZ = group.z.reduce((sum, a) => sum + a.value, 0);
+
+                      const diffAmt = Math.abs(totalD - totalZ);
+                      const diffVal = Math.abs(valD - valZ);
+                      
+                      // If Value Diff > $0.01
+                      if (diffVal > 0.01) {
+                         allIssues.push({
+                           id: Math.random().toString(36),
+                           address: address,
+                           chain: chain,
+                           protocol: pName,
+                           symbol: sym,
+                           type: group.d[0]?.type || group.z[0]?.type || 'unknown',
+                           debankVal: valD,
+                           zerionVal: valZ,
+                           diff: valD - valZ
+                         });
+                      }
+                   });
+                });
+             });
+          });
+          
+          this.issues = allIssues;
+        },
+        renderCharts() {
+          // 1. Chain Chart
+          const chainStats = {};
+          this.issues.forEach(i => {
+             chainStats[i.chain] = (chainStats[i.chain] || 0) + 1;
+          });
+
+          new Chart(document.getElementById('chainChart'), {
+            type: 'bar',
+            data: {
+              labels: Object.keys(chainStats),
+              datasets: [{
+                label: '差异数量',
+                data: Object.values(chainStats),
+                backgroundColor: '#3b82f6',
+                borderRadius: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+              }
+            }
+          });
+
+          // 2. Protocol Chart
+          const protoStats = {};
+          this.issues.forEach(i => {
+            if (Math.abs(i.diff) > 10) { // Only significant ones
+               protoStats[i.protocol] = (protoStats[i.protocol] || 0) + 1;
+            }
+          });
+          
+          // Sort and take top 8
+          const sortedProtos = Object.entries(protoStats).sort((a,b) => b[1] - a[1]).slice(0, 8);
+
+          new Chart(document.getElementById('protocolChart'), {
+            type: 'doughnut',
+            data: {
+              labels: sortedProtos.map(p => p[0]),
+              datasets: [{
+                data: sortedProtos.map(p => p[1]),
+                backgroundColor: [
+                  '#ef4444', '#f97316', '#f59e0b', '#84cc16', 
+                  '#10b981', '#06b6d4', '#3b82f6', '#6366f1'
+                ],
+                borderWidth: 0
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { 
+                legend: { position: 'right', labels: { color: '#94a3b8' } } 
+              }
+            }
+          });
+        },
+        formatMoney(val) {
+          return val.toLocaleString('en-US', { maximumFractionDigits: 2 });
+        },
+        formatAddress(addr) {
+          return addr.substring(0, 6) + '...' + addr.substring(addr.length - 4);
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+
+</html>
