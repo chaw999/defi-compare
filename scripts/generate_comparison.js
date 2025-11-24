@@ -135,12 +135,18 @@ function normalizeZerion(chainDataRaw) {
     protocols[protoName].value += val;
     totalValue += val;
 
+    let type = attrs.position_type;
+    // Fix: Zerion 'locked' is equivalent to DeBank 'supply'
+    if (type === 'locked') {
+      type = 'supply';
+    }
+
     protocols[protoName].assets.push({
       symbol: attrs.fungible_info?.symbol || '?',
       amount: attrs.quantity?.float || 0,
       price: attrs.price || 0,
       value: val,
-      type: attrs.position_type, // 'staked', 'deposited', etc.
+      type: type, // 'staked', 'deposited', etc.
       flags: attrs.fungible_info?.flags // Capture flags for risk analysis
     });
   });

@@ -253,7 +253,10 @@
               <div class="card p-3 border-top border-4 border-warning h-100">
                 <div class="d-flex justify-content-between">
                   <div>
-                    <div class="small text-uppercase text-warning fw-bold mb-1">DeBank 总资产</div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                       <div class="small text-uppercase text-warning fw-bold">DeBank 总资产</div>
+                       <a :href="'https://debank.com/profile/' + selectedAddress" target="_blank" class="text-secondary small" title="Go to DeBank Profile"><i class="fas fa-external-link-alt"></i></a>
+                    </div>
                     <div class="h2 mb-0 fw-bold text-dark">${{ formatMoney(totals.debank) }}</div>
                   </div>
                   <div class="text-end">
@@ -268,7 +271,10 @@
               <div class="card p-3 border-top border-4 border-primary h-100">
                 <div class="d-flex justify-content-between">
                   <div>
-                    <div class="small text-uppercase text-primary fw-bold mb-1">Zerion 总资产</div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <div class="small text-uppercase text-primary fw-bold">Zerion 总资产</div>
+                      <a :href="'https://app.zerion.io/' + selectedAddress + '/overview'" target="_blank" class="text-secondary small" title="Go to Zerion Portfolio"><i class="fas fa-external-link-alt"></i></a>
+                    </div>
                     <div class="h2 mb-0 fw-bold text-dark">${{ formatMoney(totals.zerion) }}</div>
                   </div>
                   <div class="text-end">
@@ -500,42 +506,171 @@
           });
 
           return Object.values(protocolsMap).map(proto => {
-            const assetMap = {};
-
+            // Consolidate assets by symbol to handle type mismatches (e.g. supply vs locked)
+            // If amounts are similar, merge them.
+            // First, collect all assets into a flat list
+            let allAssets = [];
             if (proto.debank) {
               proto.debank.assets.forEach(a => {
-                const type = this.standardizeType(a.type);
-                const key = `${a.symbol}-${type}`;
-                if (!assetMap[key]) assetMap[key] = { symbol: a.symbol, type: type, debank: a, zerion: null };
-                else assetMap[key].debank = a;
+                allAssets.push({ ...a, source: 'debank', rawType: a.type });
               });
             }
-
             if (proto.zerion) {
               proto.zerion.assets.forEach(a => {
-                const type = this.standardizeType(a.type);
-                const key = `${a.symbol}-${type}`;
-                if (!assetMap[key]) assetMap[key] = { symbol: a.symbol, type: type, debank: null, zerion: a };
-                else assetMap[key].zerion = a;
+                allAssets.push({ ...a, source: 'zerion', rawType: a.type });
               });
             }
 
-            proto.assets = Object.values(assetMap).map(item => {
-              let hasDiff = false;
-              if (!item.debank || !item.zerion) {
-                hasDiff = true;
-              } else {
-                const amtD = item.debank.amount;
-                const amtZ = item.zerion.amount;
-                if (amtD === 0 && amtZ === 0) hasDiff = false;
-                else {
-                  const diffPct = Math.abs(amtD - amtZ) / Math.max(Math.abs(amtD), Math.abs(amtZ));
-                  if (diffPct > 0.01) hasDiff = true;
+            // Group by symbol
+            const assetsBySymbol = {};
+            allAssets.forEach(asset => {
+              if (!assetsBySymbol[asset.symbol]) assetsBySymbol[asset.symbol] = [];
+              assetsBySymbol[asset.symbol].push(asset);
+            });
+
+            const finalAssets = [];
+
+            Object.keys(assetsBySymbol).forEach(symbol => {
+              const assets = assetsBySymbol[symbol];
+
+              // Try to pair up debank and zerion assets
+              const debankAssets = assets.filter(a => a.source === 'debank');
+              const zerionAssets = assets.filter(a => a.source === 'zerion');
+
+              // Simple matching strategy: Match if amounts are close
+              // If multiple matches, just greedy match for now (can be improved)
+
+              const usedZerionIndices = new Set();
+
+              debankAssets.forEach(dAsset => {
+                let bestMatchIndex = -1;
+                let minDiff = Infinity;
+
+                zerionAssets.forEach((zAsset, idx) => {
+                  if (usedZerionIndices.has(idx)) return;
+
+                  // Check amount similarity
+                  const amtD = dAsset.amount;
+                  const amtZ = zAsset.amount;
+                  const diffPct = Math.abs(amtD - amtZ) / (Math.max(Math.abs(amtD), Math.abs(amtZ)) || 1);
+
+                  // Match if diff < 1% OR if types match (fallback)
+                  // User priority: quantity match implies same type
+                  if (diffPct < 0.01) {
+                    if (diffPct < minDiff) {
+                      minDiff = diffPct;
+                      bestMatchIndex = idx;
+                    }
+                  }
+                });
+
+                if (bestMatchIndex !== -1) {
+                  // Found a match based on amount!
+                  usedZerionIndices.add(bestMatchIndex);
+                  const zAsset = zerionAssets[bestMatchIndex];
+                  finalAssets.push({
+                    symbol: symbol,
+                    type: dAsset.rawType, // Prefer DeBank type naming? Or normalize?
+                    debank: dAsset,
+                    zerion: zAsset,
+                    hasDiff: false // Matched by amount, so no diff
+                  });
+                } else {
+                  // No amount match, try strict type match? 
+                  // Or just add as unmatched
+                  // Let's try finding a same-type match even if amounts differ?
+                  // User said: "If quantity consistent -> same type". 
+                  // If quantity NOT consistent, maybe they are different types or just diff amounts.
+                  // Let's check if there is a same-type Zerion asset unused
+                  let typeMatchIdx = -1;
+                  zerionAssets.forEach((zAsset, idx) => {
+                    if (usedZerionIndices.has(idx)) return;
+                    if (this.standardizeType(dAsset.rawType) === this.standardizeType(zAsset.rawType)) {
+                      typeMatchIdx = idx;
+                    }
+                  });
+
+                  if (typeMatchIdx !== -1) {
+                    usedZerionIndices.add(typeMatchIdx);
+                    const zAsset = zerionAssets[typeMatchIdx];
+
+                    // Calculate diff
+                    const amtD = dAsset.amount;
+                    const amtZ = zAsset.amount;
+                    let hasDiff = false;
+                    if (amtD === 0 && amtZ === 0) hasDiff = false;
+                    else {
+                      const diffPct = Math.abs(amtD - amtZ) / Math.max(Math.abs(amtD), Math.abs(amtZ));
+                      if (diffPct > 0.01) {
+                        // If diff > 1%, check if value diff is significant (> $0.01)
+                        // If value diff is tiny, ignore it as non-diff
+                        const valD = dAsset.value || 0;
+                        const valZ = zAsset.value || 0;
+                        if (Math.abs(valD - valZ) > 0.01) {
+                           hasDiff = true;
+                        }
+                      }
+                    }
+
+                    finalAssets.push({
+                      symbol: symbol,
+                      type: dAsset.rawType,
+                      debank: dAsset,
+                      zerion: zAsset,
+                      hasDiff: hasDiff
+                    });
+                  } else {
+                    // Truly unmatched (DeBank has it, Zerion does not)
+                    // If DeBank value is tiny (< $0.01), can we hide it?
+                    // User request: "if debank has it but zerion misses it, still show it."
+                    // User request: "if fiat value < 0.01, can hide it." -> Assuming this applies to diffs generally?
+                    // "如果法币金额小于 0.01 也可以直接隐藏" -> implies if the item itself is dust, hide it.
+                    
+                    const valD = dAsset.value || 0;
+                    if (Math.abs(valD) < 0.01) {
+                       // Hide dust asset if unmatched?
+                       // Or just mark hasDiff=false?
+                       // User said "can directly hide" (可以直接隐藏)
+                       // So we don't push to finalAssets
+                    } else {
+                       finalAssets.push({
+                         symbol: symbol,
+                         type: dAsset.rawType,
+                         debank: dAsset,
+                         zerion: null,
+                         hasDiff: true
+                       });
+                    }
+                  }
                 }
-              }
-              item.hasDiff = hasDiff;
-              return item;
+              });
+
+              // Add remaining Zerion assets
+              zerionAssets.forEach((zAsset, idx) => {
+                if (!usedZerionIndices.has(idx)) {
+                   const valZ = zAsset.value || 0;
+                   if (Math.abs(valZ) < 0.01) {
+                      // Hide dust asset from Zerion side too if unmatched
+                   } else {
+                      finalAssets.push({
+                        symbol: symbol,
+                        type: zAsset.rawType,
+                        debank: null,
+                        zerion: zAsset,
+                        hasDiff: true
+                      });
+                   }
+                }
+              });
+            });
+
+            proto.assets = finalAssets.sort((a, b) => (b.debank?.value || b.zerion?.value || 0) - (a.debank?.value || a.zerion?.value || 0));
+
+            /* Old Logic
+            proto.assets = Object.values(assetMap).map(item => {
+              // ...
             }).sort((a, b) => (b.debank?.value || 0) - (a.debank?.value || 0));
+            */
 
             proto.debankTotal = proto.debank ? proto.debank.value : 0;
             proto.zerionTotal = proto.zerion ? proto.zerion.value : 0;
