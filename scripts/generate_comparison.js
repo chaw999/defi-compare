@@ -3,7 +3,7 @@ const path = require('path');
 
 const DATA_DIR_DEBANK = path.join(__dirname, '../data');
 const DATA_DIR_ZERION = path.join(__dirname, '../data_zerion');
-const OUTPUT_FILE = path.join(__dirname, '../comparison_data.json');
+const OUTPUT_FILE = path.join(__dirname, '../dashboard/comparison_data.json');
 
 // Chain Mapping: DeBank -> Zerion (Standardized to Zerion IDs for keying)
 const CHAIN_MAP = {
@@ -48,7 +48,7 @@ function normalizeDeBank(chainData) {
   chainData.forEach(proto => {
     // DeBank "Name" is usually the Protocol Name (e.g. "Aave V3")
     const protoName = proto.name || 'Unknown';
-    
+
     if (!protocols[protoName]) {
       protocols[protoName] = {
         name: protoName,
@@ -77,7 +77,7 @@ function normalizeDeBank(chainData) {
         });
       }
       if (item.detail && item.detail.borrow_token_list) {
-         item.detail.borrow_token_list.forEach(token => {
+        item.detail.borrow_token_list.forEach(token => {
           protocols[protoName].assets.push({
             symbol: token.symbol,
             amount: token.amount,
@@ -154,12 +154,12 @@ function main() {
 
   addresses.forEach(address => {
     result[address] = {};
-    
+
     // Identify common chains between both datasets for this address
     // Iterate our CHAIN_MAP keys (DeBank IDs)
     Object.keys(CHAIN_MAP).forEach(debankChainId => {
       const zerionChainId = CHAIN_MAP[debankChainId];
-      
+
       const debankFile = path.join(DATA_DIR_DEBANK, address, `${debankChainId}.json`);
       const zerionFile = path.join(DATA_DIR_ZERION, address, `${zerionChainId}.json`);
 
