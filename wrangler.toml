@@ -1,0 +1,3 @@
+name = "defi-comparison"
+pages_build_output_dir = "dashboard"
+compatibility_date = "2025-11-24"
