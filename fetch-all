@@ -1,0 +1,57 @@
+#!/bin/bash
+
+echo "📊 正在检查环境..."
+
+# Check Node
+if command -v node &> /dev/null; then
+  echo "Node 版本: $(node -v)"
+else
+  echo "❌ Node 未安装"
+  exit 1
+fi
+
+# Check node_modules
+if [ -d "node_modules" ]; then
+  echo "✅ node_modules 已检测到"
+else
+  echo "❌ 未检测到 node_modules 目录。请先运行 npm install 或 yarn install 安装依赖。"
+  exit 1
+fi
+
+echo "----------------------------------------"
+echo "🚀 第一阶段: 获取 DeBank 数据..."
+echo "----------------------------------------"
+node scripts/fetch_protocol.js
+if [ $? -ne 0 ]; then
+    echo "❌ DeBank 脚本执行失败"
+    exit 1
+fi
+
+echo ""
+echo "----------------------------------------"
+echo "🚀 第二阶段: 获取 Zerion 数据..."
+echo "----------------------------------------"
+node scripts/fetch_zerion.js
+if [ $? -ne 0 ]; then
+    echo "❌ Zerion 脚本执行失败"
+    exit 1
+fi
+
+echo ""
+echo "----------------------------------------"
+echo "🚀 第三阶段: 生成对比数据 (comparison_data.json)..."
+echo "----------------------------------------"
+node scripts/generate_comparison.js
+if [ $? -ne 0 ]; then
+    echo "❌ 对比数据生成失败"
+    exit 1
+fi
+
+echo ""
+echo "✨ 全部任务完成！数据已准备就绪。"
+echo "   - DeBank 数据: data/"
+echo "   - Zerion 数据: data_zerion/"
+echo "   - 对比文件: comparison_data.json"
+echo ""
+echo "💡 提示: 运行 'python3 -m http.server 8000' 并访问 http://localhost:8000/dashboard/ 查看网页。"
+

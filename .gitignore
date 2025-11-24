@@ -1,0 +1,7 @@
+package-lock.json
+node_modules
+
+data/
+data_zerion/
+.env
+comparison_data.json

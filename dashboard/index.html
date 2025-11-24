@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeFi 资产对比: DeBank vs Zerion</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            
+            --debank-color: #ff8a00;
+            --debank-bg: #fff7ed;
+            --zerion-color: #2962ff;
+            --zerion-bg: #eff6ff;
+            
+            /* Slightly darker diff background for better visibility */
+            --diff-bg: #ffe4e6; 
+            --diff-hover: #fecdd3;
+            
+            --header-bg: #f1f5f9; /* Neutral gray/blue for headers */
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .sidebar {
+            background-color: var(--bg-card);
+            height: 100vh;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 4px;
+        }
+        .nav-link:hover {
+            background-color: #f1f5f9;
+            color: var(--text-primary);
+        }
+        .nav-link.active {
+            background-color: #eff6ff;
+            color: var(--zerion-color);
+            font-weight: 600;
+        }
+
+        .header-logo {
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        /* Protocol Section Styles */
+        .protocol-header {
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+        }
+
+        .table-header-row {
+            background-color: #e2e8f0; /* Distinct neutral color, not red */
+            color: #475569;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .asset-row {
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+        .asset-row:last-child { border-bottom: none; }
+        
+        .asset-row.is-diff {
+            background-color: var(--diff-bg);
+            border-left: 4px solid #f43f5e; /* Stronger red indicator */
+        }
+        .asset-row.is-diff:hover {
+            background-color: var(--diff-hover);
+        }
+
+        .badge-type {
+            font-size: 0.7rem;
+            padding: 4px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .badge-supply { background-color: #dcfce7; color: #166534; } /* Green */
+        .badge-borrow { background-color: #fee2e2; color: #991b1b; } /* Red for debt */
+        .badge-other { background-color: #f1f5f9; color: #475569; } /* Gray */
+
+        .badge-risk {
+            background-color: #dc2626;
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .amount-val { font-family: 'Consolas', monospace; font-weight: 600; }
+        .diff-indicator { color: #dc2626; font-size: 0.9rem; }
+
+        .col-separator {
+            border-right: 1px solid var(--border-color);
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            background: white;
+            border-radius: 12px;
+            border: 1px dashed var(--border-color);
+        }
+
+        .filter-toggle-btn {
+            min-width: 140px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div id="app" class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar p-3">
+                <div class="mb-4 px-2">
+                    <div class="header-logo h5 mb-0"><i class="fas fa-exchange-alt text-primary me-2"></i>DeFi Diff</div>
+                    <small class="text-secondary">DeBank vs Zerion</small>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label small text-uppercase fw-bold text-secondary px-2">钱包列表 (Wallets)</label>
+                    <div class="nav flex-column">
+                        <a v-for="(data, addr) in comparisonData" 
+                           :key="addr"
+                           href="#" 
+                           class="nav-link text-truncate" 
+                           :class="{ active: selectedAddress === addr }"
+                           @click="selectedAddress = addr">
+                            <i class="fas fa-wallet me-2 opacity-50"></i>
+                            {{ formatAddress(addr) }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 bg-body" style="height: 100vh; overflow-y: auto;">
+                <!-- Top Bar -->
+                <div class="bg-white border-bottom p-3 sticky-top shadow-sm d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <h4 class="mb-0 fw-bold">{{ selectedAddress || '请选择钱包' }}</h4>
+                        
+                        <!-- Chain Selector -->
+                         <select class="form-select form-select-sm fw-bold border-secondary bg-light" style="width: auto; min-width: 160px;" v-model="selectedChain">
+                            <option value="all">🌐 全部网络 (All)</option>
+                            <option v-for="chain in availableChains" :value="chain">{{ formatChain(chain) }}</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Filter Toggle -->
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-sm fw-bold filter-toggle-btn" 
+                                :class="showOnlyDiffs ? 'btn-danger' : 'btn-outline-secondary'" 
+                                @click="showOnlyDiffs = !showOnlyDiffs">
+                            <i class="fas" :class="showOnlyDiffs ? 'fa-filter' : 'fa-eye'"></i>
+                            {{ showOnlyDiffs ? '只看差异' : '显示全部' }}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4" v-if="selectedAddress">
+                    
+                    <!-- Summary Stats -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card p-3 border-top border-4 border-warning h-100">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="small text-uppercase text-warning fw-bold mb-1">DeBank 总资产</div>
+                                        <div class="h2 mb-0 fw-bold text-dark">${{ formatMoney(totals.debank) }}</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="h4 mb-0 text-secondary"><i class="fas fa-layer-group"></i> {{ totals.debankCount }}</div>
+                                        <div class="small text-secondary">协议数量</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card p-3 border-top border-4 border-primary h-100">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="small text-uppercase text-primary fw-bold mb-1">Zerion 总资产</div>
+                                        <div class="h2 mb-0 fw-bold text-dark">${{ formatMoney(totals.zerion) }}</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="h4 mb-0 text-secondary"><i class="fas fa-layer-group"></i> {{ totals.zerionCount }}</div>
+                                        <div class="small text-secondary">协议数量</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison List -->
+                    <div v-if="filteredRows.length === 0" class="empty-state">
+                        <i class="fas fa-check-circle fa-3x mb-3 text-success opacity-50"></i>
+                        <h5>未发现差异！</h5>
+                        <p class="text-secondary">当前筛选条件下，两个平台的数据完全一致。</p>
+                    </div>
+
+                    <div v-for="proto in filteredRows" :key="proto.uniqueKey" class="card overflow-hidden">
+                        <!-- Protocol Header -->
+                        <div class="protocol-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-dark text-white me-2" v-if="proto.chain">{{ formatChain(proto.chain) }}</span>
+                                <h5 class="mb-0 fw-bold text-dark">{{ proto.name }}</h5>
+                            </div>
+                            <div class="d-flex gap-4 text-end">
+                                <div>
+                                    <small class="text-warning d-block fw-bold">DeBank</small>
+                                    <span class="fw-bold">${{ formatMoney(proto.debankTotal) }}</span>
+                                </div>
+                                <div>
+                                    <small class="text-primary d-block fw-bold">Zerion</small>
+                                    <span class="fw-bold">${{ formatMoney(proto.zerionTotal) }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Asset Rows Header (Replaced styling) -->
+                        <div class="row g-0 table-header-row py-2 px-3 border-bottom">
+                            <div class="col-6 col-separator pe-3">
+                                <div class="row g-0">
+                                    <div class="col-6">资产 / 类型 (Asset/Type)</div>
+                                    <div class="col-3 text-end">数量 (Balance)</div>
+                                    <div class="col-3 text-end">价值 (Value)</div>
+                                </div>
+                            </div>
+                            <div class="col-6 ps-3">
+                                <div class="row g-0">
+                                    <div class="col-6">资产 / 类型 (Asset/Type)</div>
+                                    <div class="col-3 text-end">数量 (Balance)</div>
+                                    <div class="col-3 text-end">价值 (Value)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Asset List -->
+                        <div v-for="asset in proto.assets" :key="asset.symbol + asset.type" class="asset-row row g-0 px-3 py-2 align-items-center" :class="{ 'is-diff': asset.hasDiff }">
+                            
+                            <template v-if="!showOnlyDiffs || asset.hasDiff">
+                                <!-- DeBank Side -->
+                                <div class="col-6 col-separator pe-3">
+                                    <div v-if="asset.debank" class="row g-0 align-items-center">
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="fw-bold text-dark">{{ asset.debank.symbol }}</span>
+                                                <span :class="getTypeBadgeClass(asset.debank.type)" class="badge-type">{{ formatType(asset.debank.type) }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 text-end amount-val text-secondary">
+                                            {{ formatNumber(asset.debank.amount) }}
+                                        </div>
+                                        <div class="col-3 text-end amount-val text-dark">
+                                            ${{ formatNumber(asset.debank.value, 2) }}
+                                        </div>
+                                    </div>
+                                    <div v-else class="text-center text-secondary small fst-italic py-1 opacity-50">
+                                        - DeBank 未收录 -
+                                    </div>
+                                </div>
+
+                                <!-- Zerion Side -->
+                                <div class="col-6 ps-3">
+                                    <div v-if="asset.zerion" class="row g-0 align-items-center">
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="fw-bold text-dark">{{ asset.zerion.symbol }}</span>
+                                                <span :class="getTypeBadgeClass(asset.zerion.type)" class="badge-type">{{ formatType(asset.zerion.type) }}</span>
+                                                
+                                                <!-- Risk Badge -->
+                                                <span v-if="hasRisk(asset.zerion)" class="badge-risk" title="Potential Risk / Spam">
+                                                    <i class="fas fa-exclamation-triangle"></i> 风险 (Risk)
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 text-end amount-val text-secondary">
+                                            {{ formatNumber(asset.zerion.amount) }}
+                                            <i v-if="asset.hasDiff" class="fas fa-exclamation-circle diff-indicator ms-1" title="数量不一致"></i>
+                                        </div>
+                                        <div class="col-3 text-end amount-val text-dark">
+                                            ${{ formatNumber(asset.zerion.value, 2) }}
+                                        </div>
+                                    </div>
+                                    <div v-else class="text-center text-secondary small fst-italic py-1 opacity-50">
+                                        - Zerion 未收录 -
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center text-secondary mt-5 mb-5 small">
+                        DeFi 数据对比工具生成
+                    </div>
+
+                </div>
+                <div v-else class="d-flex h-100 align-items-center justify-content-center flex-column text-secondary">
+                    <i class="fas fa-wallet fa-4x mb-3 opacity-25"></i>
+                    <h4>请选择左侧钱包以查看对比</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    comparisonData: {},
+                    selectedAddress: null,
+                    selectedChain: 'all',
+                    showOnlyDiffs: false
+                }
+            },
+            computed: {
+                availableChains() {
+                    if (!this.selectedAddress || !this.comparisonData[this.selectedAddress]) return [];
+                    return Object.keys(this.comparisonData[this.selectedAddress]);
+                },
+                allProtocols() {
+                    if (!this.selectedAddress) return [];
+                    const chainMap = this.comparisonData[this.selectedAddress];
+                    
+                    let targetChains = [];
+                    if (this.selectedChain === 'all') {
+                        targetChains = Object.keys(chainMap);
+                    } else {
+                        targetChains = [this.selectedChain];
+                    }
+
+                    let result = [];
+                    
+                    targetChains.forEach(chain => {
+                        const data = chainMap[chain];
+                        if(!data) return;
+                        
+                        const chainProtocols = this.processChainData(data, chain);
+                        result = result.concat(chainProtocols);
+                    });
+
+                    return result.sort((a, b) => {
+                        const valA = a.debankTotal + a.zerionTotal;
+                        const valB = b.debankTotal + b.zerionTotal;
+                        return valB - valA;
+                    });
+                },
+                filteredRows() {
+                    if (!this.showOnlyDiffs) return this.allProtocols;
+
+                    return this.allProtocols.filter(proto => {
+                        return proto.assets.some(a => a.hasDiff);
+                    });
+                },
+                totals() {
+                    let dTotal = 0;
+                    let zTotal = 0;
+                    let dCount = 0;
+                    let zCount = 0;
+                    
+                    this.allProtocols.forEach(p => {
+                        if(p.debank) { dTotal += p.debankTotal; dCount++; }
+                        if(p.zerion) { zTotal += p.zerionTotal; zCount++; }
+                    });
+
+                    return { debank: dTotal, zerion: zTotal, debankCount: dCount, zerionCount: zCount };
+                }
+            },
+            mounted() {
+                this.loadData();
+            },
+            methods: {
+                async loadData() {
+                    try {
+                        const response = await fetch('../comparison_data.json');
+                        this.comparisonData = await response.json();
+                        const addrs = Object.keys(this.comparisonData);
+                        if (addrs.length > 0) this.selectedAddress = addrs[0];
+                    } catch (e) {
+                        console.error(e);
+                    }
+                },
+                processChainData(data, chain) {
+                    const protocolsMap = {};
+
+                    Object.values(data.debank.protocols).forEach(p => {
+                        const key = p.name.toLowerCase();
+                        if (!protocolsMap[key]) {
+                            protocolsMap[key] = { name: p.name, debank: p, zerion: null, assets: [], chain: chain, uniqueKey: chain + p.name };
+                        } else {
+                            protocolsMap[key].debank = p;
+                        }
+                    });
+
+                    Object.values(data.zerion.protocols).forEach(p => {
+                        const key = p.name.toLowerCase();
+                        if (!protocolsMap[key]) {
+                            protocolsMap[key] = { name: p.name, debank: null, zerion: p, assets: [], chain: chain, uniqueKey: chain + p.name };
+                        } else {
+                            protocolsMap[key].zerion = p;
+                        }
+                    });
+
+                    return Object.values(protocolsMap).map(proto => {
+                        const assetMap = {};
+
+                        if (proto.debank) {
+                            proto.debank.assets.forEach(a => {
+                                const type = this.standardizeType(a.type);
+                                const key = `${a.symbol}-${type}`;
+                                if (!assetMap[key]) assetMap[key] = { symbol: a.symbol, type: type, debank: a, zerion: null };
+                                else assetMap[key].debank = a;
+                            });
+                        }
+
+                        if (proto.zerion) {
+                            proto.zerion.assets.forEach(a => {
+                                const type = this.standardizeType(a.type);
+                                const key = `${a.symbol}-${type}`;
+                                if (!assetMap[key]) assetMap[key] = { symbol: a.symbol, type: type, debank: null, zerion: a };
+                                else assetMap[key].zerion = a;
+                            });
+                        }
+
+                        proto.assets = Object.values(assetMap).map(item => {
+                            let hasDiff = false;
+                            if (!item.debank || !item.zerion) {
+                                hasDiff = true;
+                            } else {
+                                const amtD = item.debank.amount;
+                                const amtZ = item.zerion.amount;
+                                if (amtD === 0 && amtZ === 0) hasDiff = false;
+                                else {
+                                    const diffPct = Math.abs(amtD - amtZ) / Math.max(Math.abs(amtD), Math.abs(amtZ));
+                                    if (diffPct > 0.01) hasDiff = true; 
+                                }
+                            }
+                            item.hasDiff = hasDiff;
+                            return item;
+                        }).sort((a, b) => (b.debank?.value || 0) - (a.debank?.value || 0));
+
+                        proto.debankTotal = proto.debank ? proto.debank.value : 0;
+                        proto.zerionTotal = proto.zerion ? proto.zerion.value : 0;
+
+                        return proto;
+                    });
+                },
+                standardizeType(rawType) {
+                    if (!rawType) return 'other';
+                    rawType = rawType.toLowerCase();
+                    if (rawType.includes('supply') || rawType.includes('deposit') || rawType.includes('stake') || rawType.includes('lend')) return 'supply';
+                    if (rawType.includes('borrow') || rawType.includes('loan') || rawType.includes('debt')) return 'borrow';
+                    return 'other';
+                },
+                hasRisk(zerionAsset) {
+                    if (zerionAsset.flags && zerionAsset.flags.is_trash) return true;
+                    return false;
+                },
+                formatAddress(addr) {
+                    return addr.substring(0, 6) + '...' + addr.substring(addr.length - 4);
+                },
+                formatChain(chain) {
+                    if (!chain) return '';
+                    return chain.charAt(0).toUpperCase() + chain.slice(1).replace(/-/g, ' ');
+                },
+                formatType(type) {
+                    const map = {
+                        'supply': '存款 (Supply)',
+                        'borrow': '借款 (Borrow)',
+                        'other': '资产 (Asset)'
+                    };
+                    return map[type] || type;
+                },
+                getTypeBadgeClass(type) {
+                    const t = this.standardizeType(type);
+                    return t === 'supply' ? 'badge-supply' : (t === 'borrow' ? 'badge-borrow' : 'badge-other');
+                },
+                formatMoney(value) {
+                    return (value || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                },
+                formatNumber(num, decimals = 4) {
+                    if (num === undefined || num === null) return '-';
+                    if (Math.abs(num) < 0.0001 && num !== 0) return '<0.0001';
+                    return num.toLocaleString('en-US', { maximumFractionDigits: decimals });
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
