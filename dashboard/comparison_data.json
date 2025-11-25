@@ -17575,9 +17575,9 @@
               }
             ]
           },
-          "Tokemak": {
-            "name": "Tokemak",
-            "id": "Tokemak",
+          "AUTO Finance": {
+            "name": "AUTO Finance",
+            "id": "AUTO Finance",
             "value": 647.47031602182,
             "assets": [
               {
@@ -18306,9 +18306,9 @@
               }
             ]
           },
-          "Spool": {
-            "name": "Spool",
-            "id": "Spool",
+          "Yelay": {
+            "name": "Yelay",
+            "id": "Yelay",
             "value": 7.668795118916726,
             "assets": [
               {
@@ -43038,9 +43038,9 @@
       },
       "zerion": {
         "protocols": {
-          "MakerDAO": {
-            "name": "MakerDAO",
-            "id": "MakerDAO",
+          "Maker": {
+            "name": "Maker",
+            "id": "Maker",
             "value": 6993284.873719691,
             "assets": [
               {

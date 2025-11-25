@@ -10,10 +10,12 @@
   <!-- FontAwesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap"
+    rel="stylesheet">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
+
   <style>
     :root {
       --bg-body: #f8fafc;
@@ -21,7 +23,7 @@
       --text-primary: #0f172a;
       --text-secondary: #64748b;
       --border-color: #e2e8f0;
-      
+
       --accent-primary: #3b82f6;
       --accent-danger: #ef4444;
       --accent-success: #22c55e;
@@ -34,7 +36,11 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-    h1, h2, h3, h4, h5 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
       font-weight: 800;
       letter-spacing: -0.5px;
     }
@@ -95,7 +101,7 @@
       color: #92400e;
       border: 1px solid #fcd34d;
     }
-    
+
     .chart-container {
       position: relative;
       height: 300px;
@@ -119,22 +125,25 @@
     ::-webkit-scrollbar {
       width: 8px;
     }
+
     ::-webkit-scrollbar-track {
       background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
-      background: #cbd5e1; 
+      background: #cbd5e1;
       border-radius: 4px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8; 
+      background: #94a3b8;
     }
   </style>
 </head>
 
 <body>
   <div id="app" class="container-fluid py-4 px-4">
-    
+
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-end mb-5 border-bottom pb-3">
       <div>
@@ -142,7 +151,27 @@
         <p class="text-secondary mb-0 mono">DeBank vs Zerion 数据分析</p>
       </div>
       <div class="text-end">
-        <a href="index.html" class="btn btn-outline-primary btn-sm mb-2"><i class="fas fa-arrow-left me-2"></i>返回仪表盘</a>
+        <!-- Comparison Mode Radios -->
+        <div class="d-inline-flex align-items-center gap-3 bg-light rounded px-2 py-1 border mb-2">
+          <div class="form-check form-check-inline m-0">
+            <input class="form-check-input" type="radio" id="compareModeFiat" value="fiat" v-model="compareMode"
+              @change="analyzeData">
+            <label class="form-check-label small fw-bold" for="compareModeFiat" title="法币金额相差在 1% 或 1 美金以内认为相同">
+              法币维度
+            </label>
+          </div>
+          <div class="form-check form-check-inline m-0">
+            <input class="form-check-input" type="radio" id="compareModeToken" value="token" v-model="compareMode"
+              @change="analyzeData">
+            <label class="form-check-label small fw-bold" for="compareModeToken" title="完整对比代币数量名称一一对应的关系">
+              代币维度
+            </label>
+          </div>
+        </div>
+        <div class="d-block">
+          <a href="index.html" class="btn btn-outline-primary btn-sm mb-2"><i
+              class="fas fa-arrow-left me-2"></i>返回仪表盘</a>
+        </div>
         <div class="text-secondary small mono">生成时间: {{ new Date().toLocaleString('zh-CN') }}</div>
       </div>
     </div>
@@ -189,7 +218,8 @@
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <div class="text-secondary small text-uppercase fw-bold mb-1">通过率</div>
-              <div class="h2 mb-0 fw-bold" :class="passRate > 90 ? 'text-success' : 'text-warning'">{{ passRate }}%</div>
+              <div class="h2 mb-0 fw-bold" :class="passRate > 90 ? 'text-success' : 'text-warning'">{{ passRate }}%
+              </div>
               <small class="text-secondary">无重大问题的地址比例</small>
             </div>
             <i class="fas fa-chart-pie fa-2x opacity-25" :class="passRate > 90 ? 'text-success' : 'text-warning'"></i>
@@ -199,10 +229,10 @@
     </div>
 
     <div class="row">
-      
+
       <!-- Left Column: Charts & Analysis -->
       <div class="col-md-8">
-        
+
         <!-- Charts Row -->
         <div class="row mb-4">
           <div class="col-md-6">
@@ -250,7 +280,8 @@
                   <tr v-for="issue in highPriorityIssues.slice(0, 10)" :key="issue.id">
                     <td class="ps-4">
                       <div class="mono small text-primary">{{ formatAddress(issue.address) }}</div>
-                      <div class="badge bg-dark border border-secondary text-secondary mt-1" style="font-size: 0.6rem;">{{ issue.chain }}</div>
+                      <div class="badge bg-dark border border-secondary text-secondary mt-1" style="font-size: 0.6rem;">
+                        {{ issue.chain }}</div>
                     </td>
                     <td class="fw-bold">{{ issue.protocol }}</td>
                     <td>
@@ -284,7 +315,7 @@
 
       <!-- Right Column: QA Action Items -->
       <div class="col-md-4">
-        
+
         <!-- Action Plan -->
         <div class="card mb-4">
           <div class="card-header border-warning text-warning"><i class="fas fa-clipboard-check me-2"></i>QA 行动建议</div>
@@ -295,7 +326,8 @@
               <p class="small text-secondary">无需特别行动。</p>
             </div>
             <div v-else>
-              <div v-for="(item, idx) in actionItems" :key="idx" class="action-item" :class="{ critical: item.critical }">
+              <div v-for="(item, idx) in actionItems" :key="idx" class="action-item"
+                :class="{ critical: item.critical }">
                 <div class="d-flex justify-content-between mb-1">
                   <span class="fw-bold small text-uppercase" :class="item.critical ? 'text-danger' : 'text-warning'">
                     {{ item.type }}
@@ -313,17 +345,19 @@
         <div class="card">
           <div class="card-header">缺失资产分析</div>
           <div class="card-body p-0">
-             <ul class="list-group list-group-flush">
-               <li v-for="(stat, token) in missingTokenStats" :key="token" class="list-group-item bg-transparent text-dark d-flex justify-content-between align-items-center">
-                 <div class="d-flex align-items-center gap-2">
-                   <span class="fw-bold">{{ token }}</span>
-                 </div>
-                 <div class="text-end">
-                    <div class="badge bg-danger mb-1">{{ stat.count }} 次失败</div>
-                    <div class="small text-secondary" style="font-size: 0.7rem;">最大差异: ${{ formatMoney(stat.maxDiff) }}</div>
-                 </div>
-               </li>
-             </ul>
+            <ul class="list-group list-group-flush">
+              <li v-for="(stat, token) in missingTokenStats" :key="token"
+                class="list-group-item bg-transparent text-dark d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fw-bold">{{ token }}</span>
+                </div>
+                <div class="text-end">
+                  <div class="badge bg-danger mb-1">{{ stat.count }} 次失败</div>
+                  <div class="small text-secondary" style="font-size: 0.7rem;">最大差异: ${{ formatMoney(stat.maxDiff) }}
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -343,7 +377,8 @@
         return {
           reportData: {},
           issues: [],
-          chartInstances: {}
+          chartInstances: {},
+          compareMode: 'fiat' // 'fiat' | 'token'
         }
       },
       computed: {
@@ -355,9 +390,21 @@
         },
         passRate() {
           if (Object.keys(this.reportData).length === 0) return 0;
-          const failedAddrs = new Set(this.highPriorityIssues.map(i => i.address));
-          const total = Object.keys(this.reportData).length;
-          return Math.round(((total - failedAddrs.size) / total) * 100);
+          // Get list of all unique addresses in the report data
+          const allAddresses = new Set(Object.keys(this.reportData));
+          
+          // Get list of addresses that have ISSUES based on current mode
+          // We use 'this.issues' which is already filtered by analyzeData for the current mode
+          const failedAddrs = new Set(this.issues.map(i => i.address));
+          
+          const total = allAddresses.size;
+          const passed = total - failedAddrs.size;
+          
+          if (total === 0) return 0;
+          // Ensure 0% is handled correctly if no addresses pass
+          if (passed === 0 && total > 0) return 0;
+          
+          return Math.round((passed / total) * 100);
         },
         highPriorityIssues() {
           // Filter issues with > $10 diff
@@ -365,7 +412,7 @@
         },
         actionItems() {
           const items = [];
-          
+
           // Group issues by protocol
           const protoIssues = {};
           this.highPriorityIssues.forEach(i => {
@@ -375,51 +422,51 @@
 
           Object.entries(protoIssues).forEach(([proto, count]) => {
             if (count > 2) {
-               items.push({
-                 type: '协议集成',
-                 critical: true,
-                 title: `检查 ${proto} 协议`,
-                 desc: `发现 ${count} 个重大差异。请检查适配器或映射逻辑。`,
-                 count: count
-               });
+              items.push({
+                type: '协议集成',
+                critical: true,
+                title: `检查 ${proto} 协议`,
+                desc: `发现 ${count} 个重大差异。请检查适配器或映射逻辑。`,
+                count: count
+              });
             }
           });
 
           // Check specific chains
           const chainIssues = {};
           this.highPriorityIssues.forEach(i => {
-             if (!chainIssues[i.chain]) chainIssues[i.chain] = 0;
-             chainIssues[i.chain]++;
+            if (!chainIssues[i.chain]) chainIssues[i.chain] = 0;
+            chainIssues[i.chain]++;
           });
-          
+
           Object.entries(chainIssues).forEach(([chain, count]) => {
-             if (count > 5) {
-                items.push({
-                  type: '公链稳定性',
-                  critical: false,
-                  title: `审计 ${chain} 数据`,
-                  desc: `${chain} 链失败率较高。请验证 RPC 或索引器延迟。`,
-                  count: count
-                });
-             }
+            if (count > 5) {
+              items.push({
+                type: '公链稳定性',
+                critical: false,
+                title: `审计 ${chain} 数据`,
+                desc: `${chain} 链失败率较高。请验证 RPC 或索引器延迟。`,
+                count: count
+              });
+            }
           });
 
           return items.sort((a, b) => b.critical - a.critical);
         },
         missingTokenStats() {
-           const stats = {};
-           this.highPriorityIssues.forEach(i => {
-              if (!stats[i.symbol]) stats[i.symbol] = { count: 0, maxDiff: 0 };
-              stats[i.symbol].count++;
-              if (Math.abs(i.diff) > stats[i.symbol].maxDiff) stats[i.symbol].maxDiff = Math.abs(i.diff);
-           });
-           
-           // Return top 5
-           return Object.fromEntries(
-              Object.entries(stats)
-              .sort(([,a], [,b]) => b.count - a.count)
+          const stats = {};
+          this.highPriorityIssues.forEach(i => {
+            if (!stats[i.symbol]) stats[i.symbol] = { count: 0, maxDiff: 0 };
+            stats[i.symbol].count++;
+            if (Math.abs(i.diff) > stats[i.symbol].maxDiff) stats[i.symbol].maxDiff = Math.abs(i.diff);
+          });
+
+          // Return top 5
+          return Object.fromEntries(
+            Object.entries(stats)
+              .sort(([, a], [, b]) => b.count - a.count)
               .slice(0, 5)
-           );
+          );
         }
       },
       mounted() {
@@ -428,7 +475,8 @@
       methods: {
         async loadData() {
           try {
-            const response = await fetch('./comparison_data.json');
+            // Cache busting with timestamp
+            const response = await fetch('./comparison_data.json?t=' + new Date().getTime());
             this.reportData = await response.json();
             this.analyzeData();
             this.$nextTick(() => {
@@ -438,86 +486,123 @@
             console.error(e);
           }
         },
+        standardizeType(rawType) {
+          if (!rawType) return 'other';
+          rawType = rawType.toLowerCase();
+          if (rawType.includes('supply') || rawType.includes('deposit') || rawType.includes('stake') || rawType.includes('lend')) return 'supply';
+          if (rawType.includes('borrow') || rawType.includes('loan') || rawType.includes('debt')) return 'borrow';
+          return 'other';
+        },
         analyzeData() {
           const allIssues = [];
-          
+
           Object.entries(this.reportData).forEach(([address, chainMap]) => {
-             Object.entries(chainMap).forEach(([chain, data]) => {
-                // Use same logic as dashboard to find diffs
-                const protocolsMap = {};
+            Object.entries(chainMap).forEach(([chain, data]) => {
+              // 1. Flatten Protocols
+              const allProtos = new Set([
+                ...Object.values(data.debank.protocols).map(p => p.name),
+                ...Object.values(data.zerion.protocols).map(p => p.name)
+              ]);
 
-                // Merge Protocol Logic (Simplified for report)
-                // ... (Reuse basic merging structure)
-                // Actually, let's just iterate both lists and find mismatches directly for speed
-                // Or better, replicate the consolidation logic to be accurate
-                
-                // 1. Flatten Protocols
-                const allProtos = new Set([
-                  ...Object.values(data.debank.protocols).map(p => p.name),
-                  ...Object.values(data.zerion.protocols).map(p => p.name)
-                ]);
+              allProtos.forEach(pName => {
+                // Find in both
+                const pD = Object.values(data.debank.protocols).find(p => p.name === pName);
+                const pZ = Object.values(data.zerion.protocols).find(p => p.name === pName);
 
-                allProtos.forEach(pName => {
-                   // Find in both
-                   const pD = Object.values(data.debank.protocols).find(p => p.name === pName);
-                   const pZ = Object.values(data.zerion.protocols).find(p => p.name === pName); // Name matching might be weak if ID differs, but ok for now
+                if (!pD && !pZ) return;
 
-                   if (!pD && !pZ) return;
+                // Collect assets
+                let assetsD = pD ? pD.assets : [];
+                let assetsZ = pZ ? pZ.assets : [];
 
-                   // Collect assets
-                   let assetsD = pD ? pD.assets : [];
-                   let assetsZ = pZ ? pZ.assets : [];
-
-                   // Flatten assets to finding diffs
-                   // Using the logic: Group by Symbol -> Match Amounts -> Remainder is Diff
-                   
-                   const symbolMap = {};
-                   assetsD.forEach(a => { 
-                     if(!symbolMap[a.symbol]) symbolMap[a.symbol] = { d: [], z: [] };
-                     symbolMap[a.symbol].d.push(a);
-                   });
-                   assetsZ.forEach(a => {
-                     if(!symbolMap[a.symbol]) symbolMap[a.symbol] = { d: [], z: [] };
-                     symbolMap[a.symbol].z.push(a);
-                   });
-
-                   Object.keys(symbolMap).forEach(sym => {
-                      const group = symbolMap[sym];
-                      // Naive matching for report: Sum totals
-                      const totalD = group.d.reduce((sum, a) => sum + a.amount, 0);
-                      const totalZ = group.z.reduce((sum, a) => sum + a.amount, 0);
-                      const valD = group.d.reduce((sum, a) => sum + a.value, 0);
-                      const valZ = group.z.reduce((sum, a) => sum + a.value, 0);
-
-                      const diffAmt = Math.abs(totalD - totalZ);
-                      const diffVal = Math.abs(valD - valZ);
-                      
-                      // If Value Diff > $0.01
-                      if (diffVal > 0.01) {
-                         allIssues.push({
-                           id: Math.random().toString(36),
-                           address: address,
-                           chain: chain,
-                           protocol: pName,
-                           symbol: sym,
-                           type: group.d[0]?.type || group.z[0]?.type || 'unknown',
-                           debankVal: valD,
-                           zerionVal: valZ,
-                           diff: valD - valZ
-                         });
-                      }
-                   });
+                // Group by symbol to find diffs
+                const symbolMap = {};
+                assetsD.forEach(a => {
+                  if (!symbolMap[a.symbol]) symbolMap[a.symbol] = { d: [], z: [] };
+                  symbolMap[a.symbol].d.push(a);
                 });
-             });
+                assetsZ.forEach(a => {
+                  if (!symbolMap[a.symbol]) symbolMap[a.symbol] = { d: [], z: [] };
+                  symbolMap[a.symbol].z.push(a);
+                });
+
+                Object.keys(symbolMap).forEach(sym => {
+                  const group = symbolMap[sym];
+
+                  // Calculate DeBank Total Value (already handles negative for debt in generation script)
+                  const valD = group.d.reduce((sum, a) => sum + (a.value || 0), 0);
+
+                  // Calculate Zerion Total Value (Need to handle debt manually)
+                  const valZ = group.z.reduce((sum, a) => {
+                    const type = this.standardizeType(a.type);
+                    const v = a.value || 0;
+                    return sum + (type === 'borrow' ? -v : v);
+                  }, 0);
+
+                  const diffVal = Math.abs(valD - valZ);
+                  const maxVal = Math.max(Math.abs(valD), Math.abs(valZ)) || 1;
+                  const diffPct = diffVal / maxVal;
+
+                  let hasIssue = false;
+
+                  if (this.compareMode === 'fiat') {
+                    // Fiat Mode: > $1 AND > 1% difference
+                    // Also consider small dust amounts as "no issue" even if percentage is high
+                    // e.g. Debank $0.05 vs Zerion $0.00 -> Diff $0.05 (100%), but < $1 threshold.
+                    // However, the logic (diffVal > 1 && diffPct > 0.01) handles this correctly.
+                    // Let's add a check: if token quantity matches (2 decimals), ignore fiat diff.
+                    // This matches dashboard logic to reduce noise from price feed differences.
+                    const amtD = group.d.reduce((sum, a) => sum + a.amount, 0);
+                    const amtZ = group.z.reduce((sum, a) => sum + a.amount, 0);
+                    const roundedD = Number(amtD.toFixed(2));
+                    const roundedZ = Number(amtZ.toFixed(2));
+
+                    if (roundedD === roundedZ) {
+                       hasIssue = false;
+                    } else if (diffVal > 1 && diffPct > 0.01) {
+                      hasIssue = true;
+                    }
+                  } else {
+                    // Token Mode: Quantity mismatch (> 0.01 difference)
+                    // Note: Report currently calculates Value Diff, but for Token Mode we should check quantities.
+                    // However, the current report structure is based on Values. 
+                    // To make it consistent with Dashboard Token Mode, we should flag if ANY token quantity mismatches.
+                    // But this loop is iterating symbols.
+                    const amtD = group.d.reduce((sum, a) => sum + a.amount, 0);
+                    const amtZ = group.z.reduce((sum, a) => sum + a.amount, 0);
+                    const roundedD = Number(amtD.toFixed(2));
+                    const roundedZ = Number(amtZ.toFixed(2));
+
+                    if (roundedD !== roundedZ) {
+                      hasIssue = true;
+                    }
+                  }
+
+                  if (hasIssue) {
+                    allIssues.push({
+                      id: Math.random().toString(36),
+                      address: address,
+                      chain: chain,
+                      protocol: pName,
+                      symbol: sym,
+                      type: group.d[0]?.type || group.z[0]?.type || 'unknown',
+                      debankVal: valD,
+                      zerionVal: valZ,
+                      diff: valD - valZ
+                    });
+                  }
+                });
+              });
+            });
           });
-          
+
           this.issues = allIssues;
         },
         renderCharts() {
           // 1. Chain Chart
           const chainStats = {};
           this.issues.forEach(i => {
-             chainStats[i.chain] = (chainStats[i.chain] || 0) + 1;
+            chainStats[i.chain] = (chainStats[i.chain] || 0) + 1;
           });
 
           new Chart(document.getElementById('chainChart'), {
@@ -546,12 +631,12 @@
           const protoStats = {};
           this.issues.forEach(i => {
             if (Math.abs(i.diff) > 10) { // Only significant ones
-               protoStats[i.protocol] = (protoStats[i.protocol] || 0) + 1;
+              protoStats[i.protocol] = (protoStats[i.protocol] || 0) + 1;
             }
           });
-          
+
           // Sort and take top 8
-          const sortedProtos = Object.entries(protoStats).sort((a,b) => b[1] - a[1]).slice(0, 8);
+          const sortedProtos = Object.entries(protoStats).sort((a, b) => b[1] - a[1]).slice(0, 8);
 
           new Chart(document.getElementById('protocolChart'), {
             type: 'doughnut',
@@ -560,7 +645,7 @@
               datasets: [{
                 data: sortedProtos.map(p => p[1]),
                 backgroundColor: [
-                  '#ef4444', '#f97316', '#f59e0b', '#84cc16', 
+                  '#ef4444', '#f97316', '#f59e0b', '#84cc16',
                   '#10b981', '#06b6d4', '#3b82f6', '#6366f1'
                 ],
                 borderWidth: 0
@@ -569,8 +654,8 @@
             options: {
               responsive: true,
               maintainAspectRatio: false,
-              plugins: { 
-                legend: { position: 'right', labels: { color: '#94a3b8' } } 
+              plugins: {
+                legend: { position: 'right', labels: { color: '#94a3b8' } }
               }
             }
           });

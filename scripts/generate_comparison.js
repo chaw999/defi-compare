@@ -31,8 +31,14 @@ const PROTOCOL_NAME_MAP = {
   },
   'ethereum': {
     'Morpho Blue': 'Morpho',
+    'Tokemak': 'AUTO Finance',
+    'Spool': 'Yelay',
     'Euler v2': 'Euler',
-    'Compound V2': 'Compound'
+    'Compound V2': 'Compound',
+    'MakerDAO': 'Maker'
+  },
+  'optimism': {
+    'Velodrome V2': 'Velodrome'
   }
 };
 
