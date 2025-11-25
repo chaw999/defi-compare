@@ -245,7 +245,7 @@
             <div v-if="showOnlyDiffs" class="d-flex align-items-center gap-3 bg-light rounded px-2 py-1 border">
               <div class="form-check form-check-inline m-0">
                 <input class="form-check-input" type="radio" id="compareModeFiat" value="fiat" v-model="compareMode">
-                <label class="form-check-label small fw-bold" for="compareModeFiat" title="法币金额相差在 1% 或 1 美金以内认为相同">
+                <label class="form-check-label small fw-bold" for="compareModeFiat" title="法币金额相差在 10% 或 1 美金以内认为相同">
                   法币维度
                 </label>
               </div>
@@ -766,7 +766,7 @@
                 const totalMax = Math.max(Math.abs(totalD), Math.abs(totalZ)) || 1;
                 const totalDiffPct = totalDiff / totalMax;
 
-                if (totalDiff <= 1 || totalDiffPct <= 0.01) {
+                if (totalDiff <= 1 || totalDiffPct <= 0.10) {
                   // Protocol matches in Fiat Dimension!
                   // Clear all diffs
                   proto.assets.forEach(a => a.hasDiff = false);
@@ -795,7 +795,7 @@
                     const valDiffPct = valDiff / valMax;
 
                     // Mark as diff if value diff is significant
-                    if (valDiff > 1 && valDiffPct > 0.01) {
+                    if (valDiff > 1 && valDiffPct > 0.10) {
                       a.hasDiff = true;
                     } else {
                       a.hasDiff = false;
