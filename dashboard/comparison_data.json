@@ -4244,6 +4244,13 @@
                 "price": 0.01543335606754212,
                 "value": 1473.2549626792963,
                 "type": "reward"
+              },
+              {
+                "symbol": "EGP",
+                "amount": 109782.32140533612,
+                "price": 0.319,
+                "value": 35020.56052830222,
+                "type": "vesting"
               }
             ]
           },
@@ -4251,7 +4258,15 @@
             "name": "PancakeSwap",
             "id": "arb_pancakeswap",
             "value": 461.7619481079542,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "EGP",
+                "amount": 1447.5296178932733,
+                "price": 0.319,
+                "value": 461.7619481079542,
+                "type": "vesting"
+              }
+            ]
           },
           "Superfluid": {
             "name": "Superfluid",
@@ -4586,7 +4601,15 @@
             "name": "Linea Ignition",
             "id": "linea_ignition_brevis",
             "value": 527.5173114616603,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "LINEA",
+                "amount": 50096.61077508645,
+                "price": 0.01053,
+                "value": 527.5173114616603,
+                "type": "vesting"
+              }
+            ]
           }
         },
         "totalValue": 527.5173114616603
@@ -4766,7 +4789,15 @@
             "name": "CoW Swap",
             "id": "cowswap",
             "value": 1180.3063547086863,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "COW",
+                "amount": 6910.458751221817,
+                "price": 0.1708,
+                "value": 1180.3063547086863,
+                "type": "vesting"
+              }
+            ]
           },
           "Curve": {
             "name": "Curve",
@@ -6239,7 +6270,15 @@
             "name": "Magpie XYZ",
             "id": "arb_magpiexyz",
             "value": 1614.312439754117,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "EGP",
+                "amount": 5060.540563492529,
+                "price": 0.319,
+                "value": 1614.312439754117,
+                "type": "vesting"
+              }
+            ]
           },
           "Gamma": {
             "name": "Gamma",
@@ -7008,6 +7047,13 @@
                 "price": 2868.24,
                 "value": 60595.388407388644,
                 "type": "supply"
+              },
+              {
+                "symbol": "PUFFER",
+                "amount": -1.048576e-12,
+                "price": 0.06420691321698054,
+                "value": -6.732582823340859e-14,
+                "type": "vesting"
               }
             ]
           },
@@ -9026,6 +9072,13 @@
                 "price": 2867.16,
                 "value": 0.00000375261278289396,
                 "type": "supply"
+              },
+              {
+                "symbol": "SEAM",
+                "amount": 1.0043632563861093,
+                "price": 0.1463,
+                "value": 0.14693834440928782,
+                "type": "vesting"
               }
             ]
           },
@@ -9972,7 +10025,15 @@
             "name": "MON Protocol",
             "id": "monprotocol",
             "value": 0.1535992366,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "MON",
+                "amount": 14.1998,
+                "price": 0.010817,
+                "value": 0.1535992366,
+                "type": "vesting"
+              }
+            ]
           },
           "Multipli.fi": {
             "name": "Multipli.fi",
@@ -10209,7 +10270,15 @@
             "name": "Thetanuts Finance",
             "id": "thetanuts",
             "value": 1.0473757139863913,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "NUTS",
+                "amount": 716.70707999686,
+                "price": 0.0014613720768476013,
+                "value": 1.0473757139863913,
+                "type": "vesting"
+              }
+            ]
           },
           "Verse": {
             "name": "Verse",
@@ -12690,7 +12759,15 @@
             "name": "Wormhole",
             "id": "base_wormhole_bridge",
             "value": 0.9226959784837506,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "W",
+                "amount": 20.204266666666665,
+                "price": 0.045668372611911215,
+                "value": 0.9226959784837506,
+                "type": "vesting"
+              }
+            ]
           },
           "Zapper": {
             "name": "Zapper",
@@ -13191,7 +13268,15 @@
             "name": "Linea Ignition",
             "id": "linea_ignition_brevis",
             "value": 52.94655870591147,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "LINEA",
+                "amount": 5042.529400562997,
+                "price": 0.0105,
+                "value": 52.94655870591147,
+                "type": "vesting"
+              }
+            ]
           },
           "iZUMi Finance": {
             "name": "iZUMi Finance",
@@ -13225,7 +13310,15 @@
             "name": "ZeroLend",
             "id": "linea_zerolend",
             "value": 0.2712218562,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "ZERO",
+                "amount": 27932.22,
+                "price": 0.00000971,
+                "value": 0.2712218562,
+                "type": "vesting"
+              }
+            ]
           }
         },
         "totalValue": 53.58431269222476
@@ -14493,6 +14586,27 @@
                 "price": 0.9991044290356409,
                 "value": 5134.33871795431,
                 "type": "supply"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 2.7073494232588167,
+                "price": 3.904,
+                "value": 10.56949214840242,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 6.859513630641922,
+                "price": 3.904,
+                "value": 26.779541214026064,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 106.99800801918303,
+                "price": 3.904,
+                "value": 417.72022330689055,
+                "type": "vesting"
               }
             ]
           },
@@ -14640,6 +14754,13 @@
                 "price": 0.024401208160950563,
                 "value": 0.18837839889920774,
                 "type": "reward"
+              },
+              {
+                "symbol": "GRO",
+                "amount": 62.80366783973319,
+                "price": 0.024401208160950563,
+                "value": 1.5324853722285259,
+                "type": "vesting"
               }
             ]
           },
@@ -15704,7 +15825,15 @@
             "name": "Wormhole",
             "id": "wormhole_bridge",
             "value": 224.90960199999998,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "W",
+                "amount": 4910.69,
+                "price": 0.0458,
+                "value": 224.90960199999998,
+                "type": "vesting"
+              }
+            ]
           },
           "Yarm": {
             "name": "Yarm",
@@ -18845,7 +18974,15 @@
             "name": "INFINIT",
             "id": "bsc_infinit",
             "value": 2.7655639564893306,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "IN",
+                "amount": 37.5,
+                "price": 0.07374837217304882,
+                "value": 2.7655639564893306,
+                "type": "vesting"
+              }
+            ]
           },
           "Kernel DAO": {
             "name": "Kernel DAO",
@@ -20459,6 +20596,13 @@
             "assets": [
               {
                 "symbol": "THALES",
+                "amount": 3.96019589871818,
+                "price": 0.28829852777132087,
+                "value": 1.1417186472864742,
+                "type": "vesting"
+              },
+              {
+                "symbol": "THALES",
                 "amount": 2480.40960562,
                 "price": 0.28829852777132087,
                 "value": 715.0984375700887,
@@ -21259,7 +21403,15 @@
             "name": "Wormhole",
             "id": "arb_wormhole_bridge",
             "value": 16.89606154353933,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "W",
+                "amount": 371.28,
+                "price": 0.04550759950317639,
+                "value": 16.89606154353933,
+                "type": "vesting"
+              }
+            ]
           }
         },
         "totalValue": 19625.80941144167
@@ -22552,7 +22704,22 @@
             "name": "Linea Ignition",
             "id": "linea_ignition_brevis",
             "value": 15822.689961934222,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "LINEA",
+                "amount": 188519.04162328283,
+                "price": 0.01053,
+                "value": 1985.105508293168,
+                "type": "vesting"
+              },
+              {
+                "symbol": "LINEA",
+                "amount": 1314110.5843913632,
+                "price": 0.01053,
+                "value": 13837.584453641053,
+                "type": "vesting"
+              }
+            ]
           },
           "LAGOON": {
             "name": "LAGOON",
@@ -24388,7 +24555,15 @@
             "name": "Ape Bond",
             "id": "apeswap",
             "value": 0.0035068425359601574,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "ABOND",
+                "amount": 3.584736516235307,
+                "price": 0.0009782706539455922,
+                "value": 0.0035068425359601574,
+                "type": "vesting"
+              }
+            ]
           },
           "Balancer V2": {
             "name": "Balancer V2",
@@ -28605,7 +28780,15 @@
             "name": "Sablier",
             "id": "op_sablier",
             "value": 0.0006123839620334097,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "EXA",
+                "amount": 0.001578122074093089,
+                "price": 0.38804600232547465,
+                "value": 0.0006123839620334097,
+                "type": "vesting"
+              }
+            ]
           },
           "Silo": {
             "name": "Silo",
@@ -32304,7 +32487,15 @@
             "name": "Euler",
             "id": "base_euler2",
             "value": 0.0032627243583417532,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "EUL",
+                "amount": 0.000834456357632162,
+                "price": 3.91,
+                "value": 0.0032627243583417532,
+                "type": "vesting"
+              }
+            ]
           },
           "INTUITION": {
             "name": "INTUITION",
@@ -32373,13 +32564,29 @@
             "name": "Sablier",
             "id": "base_sablier",
             "value": 14.31939472019324,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "BUILD",
+                "amount": 36048319.571959235,
+                "price": 3.9722780119081644e-7,
+                "value": 14.31939472019324,
+                "type": "vesting"
+              }
+            ]
           },
           "Seamless Protocol": {
             "name": "Seamless Protocol",
             "id": "base_seamless",
             "value": 0.00009742001232347737,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "SEAM",
+                "amount": 0.000665892086968403,
+                "price": 0.1463,
+                "value": 0.00009742001232347737,
+                "type": "vesting"
+              }
+            ]
           },
           "Summer.fi": {
             "name": "Summer.fi",
@@ -32713,7 +32920,15 @@
             "name": "Linea Ignition",
             "id": "linea_ignition_brevis",
             "value": 768.6942523048863,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "LINEA",
+                "amount": 73000.40382762453,
+                "price": 0.01053,
+                "value": 768.6942523048863,
+                "type": "vesting"
+              }
+            ]
           },
           "LayerBank": {
             "name": "LayerBank",
@@ -33734,6 +33949,13 @@
                 "price": 0.1708,
                 "value": 105.9945769748278,
                 "type": "supply"
+              },
+              {
+                "symbol": "COW",
+                "amount": 5119.098436810565,
+                "price": 0.1708,
+                "value": 874.3420130072445,
+                "type": "vesting"
               }
             ]
           },
@@ -33937,7 +34159,78 @@
             "name": "Euler",
             "id": "euler2",
             "value": 2247.885666707768,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "EUL",
+                "amount": 76.72575656208134,
+                "price": 3.904,
+                "value": 299.53735361836556,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 41.86570800749846,
+                "price": 3.904,
+                "value": 163.443724061274,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 48.07288368204474,
+                "price": 3.904,
+                "value": 187.67653789470265,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 52.907960708487344,
+                "price": 3.904,
+                "value": 206.5526786059346,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 12.466009654363704,
+                "price": 3.904,
+                "value": 48.6673016906359,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 44.315126394110045,
+                "price": 3.904,
+                "value": 173.0062534426056,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 46.410702448445456,
+                "price": 3.904,
+                "value": 181.18738235873104,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 41.742398067855056,
+                "price": 3.904,
+                "value": 162.96232205690615,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 104.07701271186235,
+                "price": 3.904,
+                "value": 406.3166576271106,
+                "type": "vesting"
+              },
+              {
+                "symbol": "EUL",
+                "amount": 107.20682770274136,
+                "price": 3.904,
+                "value": 418.53545535150226,
+                "type": "vesting"
+              }
+            ]
           },
           "Fei Protocol": {
             "name": "Fei Protocol",
@@ -34070,6 +34363,13 @@
             "id": "hedgey",
             "value": 103601.86968681881,
             "assets": [
+              {
+                "symbol": "GS",
+                "amount": 8076054.997463217,
+                "price": 0.012817862447178375,
+                "value": 103517.76207333102,
+                "type": "vesting"
+              },
               {
                 "symbol": "PUFFER",
                 "amount": 1309.9463791938347,
@@ -34398,7 +34698,15 @@
             "name": "Mocaverse",
             "id": "mocaverse",
             "value": 1186.7975307033998,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "MOCA",
+                "amount": 47554.52,
+                "price": 0.02495656628861778,
+                "value": 1186.7975307033998,
+                "type": "vesting"
+              }
+            ]
           },
           "Morpho Compound": {
             "name": "Morpho Compound",
@@ -34509,7 +34817,15 @@
             "name": "Obol Collective",
             "id": "obolorg",
             "value": 525.4566582768542,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "OBOL",
+                "amount": 9213,
+                "price": 0.057034262268192144,
+                "value": 525.4566582768542,
+                "type": "vesting"
+              }
+            ]
           },
           "Omni Network": {
             "name": "Omni Network",
@@ -34865,7 +35181,22 @@
             "name": "Sablier",
             "id": "sablier",
             "value": 22.82676362485798,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "FJO",
+                "amount": 301.6537655393053,
+                "price": 0.02825885736660168,
+                "value": 8.524390734473535,
+                "type": "vesting"
+              },
+              {
+                "symbol": "FJO",
+                "amount": 506.12,
+                "price": 0.02825885736660168,
+                "value": 14.302372890384444,
+                "type": "vesting"
+              }
+            ]
           },
           "ShibaSwap": {
             "name": "ShibaSwap",
@@ -38589,7 +38920,15 @@
             "name": "De.Fi 2.0",
             "id": "bsc_defi",
             "value": 71.4169359992778,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "DEFI",
+                "amount": 100304.68539224411,
+                "price": 0.000712,
+                "value": 71.4169359992778,
+                "type": "vesting"
+              }
+            ]
           },
           "Dex Finance": {
             "name": "Dex Finance",
@@ -40354,7 +40693,15 @@
             "name": "Wormhole",
             "id": "op_wormhole_bridge",
             "value": 5.880149548512342,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "W",
+                "amount": 131.88,
+                "price": 0.04458712123530741,
+                "value": 5.880149548512342,
+                "type": "vesting"
+              }
+            ]
           }
         },
         "totalValue": 11700.945122184374
@@ -40603,6 +40950,13 @@
             "id": "arb_desk",
             "value": 28.7169763124869,
             "assets": [
+              {
+                "symbol": "DESK",
+                "amount": 48251.378068146194,
+                "price": 0.0003157184724028119,
+                "value": 15.233851375005658,
+                "type": "vesting"
+              },
               {
                 "symbol": "DESK",
                 "amount": 0,
@@ -42485,7 +42839,22 @@
             "name": "Linea Ignition",
             "id": "linea_ignition_brevis",
             "value": 3330.429900627063,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "LINEA",
+                "amount": 90028.6664138651,
+                "price": 0.01054,
+                "value": 948.9021440021381,
+                "type": "vesting"
+              },
+              {
+                "symbol": "LINEA",
+                "amount": 225951.40005929078,
+                "price": 0.01054,
+                "value": 2381.527756624925,
+                "type": "vesting"
+              }
+            ]
           }
         },
         "totalValue": 504837.53304219333
@@ -44651,6 +45020,13 @@
                 "price": 2862.22,
                 "value": 0.0000037478641894897398,
                 "type": "supply"
+              },
+              {
+                "symbol": "SEAM",
+                "amount": 0.9186565875222068,
+                "price": 0.1463,
+                "value": 0.13439945875449888,
+                "type": "vesting"
               }
             ]
           },
@@ -46857,7 +47233,15 @@
             "name": "Sablier",
             "id": "arb_sablier",
             "value": 1266.3881183343883,
-            "assets": []
+            "assets": [
+              {
+                "symbol": "TANGO",
+                "amount": 292154.2752153031,
+                "price": 0.004334655439839528,
+                "value": 1266.3881183343883,
+                "type": "vesting"
+              }
+            ]
           },
           "Sterling Finance": {
             "name": "Sterling Finance",

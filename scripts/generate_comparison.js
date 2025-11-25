@@ -38,7 +38,7 @@ const PROTOCOL_NAME_MAP = {
     'MakerDAO': 'Maker'
   },
   'optimism': {
-    'Velodrome V2': 'Velodrome'
+    'Velodrome': 'Velodrome  V2'
   }
 };
 
@@ -118,6 +118,17 @@ function normalizeDeBank(chainData) {
             value: (token.amount * token.price),
             type: 'reward'
           });
+        });
+      }
+      // Handle Vesting (Single Token in Detail)
+      if (item.detail && item.detail.token) {
+        const token = item.detail.token;
+        protocols[protoName].assets.push({
+          symbol: token.symbol.trim(),
+          amount: token.amount,
+          price: token.price,
+          value: (token.amount * token.price),
+          type: 'vesting' // Treat as supply/vesting
         });
       }
     });
