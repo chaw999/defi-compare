@@ -16,8 +16,8 @@ const CHAIN_MAP = {
   'arb': 'arbitrum',
   'base': 'base',
   'linea': 'linea',
-  'zksync': 'zksync-era',
-  'scroll': 'scroll'
+  'era': 'zksync-era',
+  'scrl': 'scroll'
 };
 
 // Reverse Map for reading DeBank files

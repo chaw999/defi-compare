@@ -4626,8 +4626,30 @@
     },
     "zksync-era": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Venus": {
+            "name": "Venus",
+            "id": "era_venus",
+            "value": 4774.064854707005,
+            "assets": [
+              {
+                "symbol": "XVS",
+                "amount": 1001,
+                "price": 4.205248153969247,
+                "value": 4209.453402123217,
+                "type": "supply"
+              },
+              {
+                "symbol": "XVS",
+                "amount": 134.263527837439,
+                "price": 4.205248153969247,
+                "value": 564.611452583789,
+                "type": "reward"
+              }
+            ]
+          }
+        },
+        "totalValue": 4774.064854707005
       },
       "zerion": {
         "protocols": {
@@ -6436,8 +6458,23 @@
     },
     "zksync-era": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Maverick V2": {
+            "name": "Maverick V2",
+            "id": "era_maverick2",
+            "value": 777.1707827623999,
+            "assets": [
+              {
+                "symbol": "MAV",
+                "amount": 24105.79351,
+                "price": 0.03224,
+                "value": 777.1707827623999,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 777.1707827623999
       },
       "zerion": {
         "protocols": {
@@ -9444,8 +9481,51 @@
     },
     "zksync-era": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "ReactorFusion": {
+            "name": "ReactorFusion",
+            "id": "era_reactorfusion",
+            "value": 3.0920889773606755e-8,
+            "assets": [
+              {
+                "symbol": "ZK",
+                "amount": 7.930466728291038e-7,
+                "price": 0.03899,
+                "value": 3.0920889773606755e-8,
+                "type": "supply"
+              }
+            ]
+          },
+          "WOO Network": {
+            "name": "WOO Network",
+            "id": "era_woo",
+            "value": 579.9225579626657,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.2021875986537618,
+                "price": 2868.24,
+                "value": 579.9225579626657,
+                "type": "supply"
+              }
+            ]
+          },
+          "ZeroLend": {
+            "name": "ZeroLend",
+            "id": "era_zerolend",
+            "value": 276.84143541169993,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.09651962018927981,
+                "price": 2868.24,
+                "value": 276.84143541169993,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 856.7639934052866
       },
       "zerion": {
         "protocols": {
@@ -9506,8 +9586,93 @@
     },
     "scroll": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Aave V3": {
+            "name": "Aave V3",
+            "id": "scrl_aave3",
+            "value": 16554.96435332326,
+            "assets": [
+              {
+                "symbol": "weETH",
+                "amount": 5.326144297880327,
+                "price": 3108.245557656356,
+                "value": 16554.96435332326,
+                "type": "supply"
+              }
+            ]
+          },
+          "Ambient": {
+            "name": "Ambient",
+            "id": "scrl_ambient",
+            "value": 878.7281650401353,
+            "assets": [
+              {
+                "symbol": "ETH",
+                "amount": 0.21714539706976482,
+                "price": 2868.24,
+                "value": 622.8251136913822,
+                "type": "supply"
+              },
+              {
+                "symbol": "wrsETH",
+                "amount": 0.08377099552071735,
+                "price": 3017.735603094251,
+                "value": 252.79871568951776,
+                "type": "supply"
+              },
+              {
+                "symbol": "ETH",
+                "amount": 0.000541938803730489,
+                "price": 2868.24,
+                "value": 1.5544105544119378,
+                "type": "reward"
+              },
+              {
+                "symbol": "wrsETH",
+                "amount": 0.00051360533481933,
+                "price": 3017.735603094251,
+                "value": 1.5499251048234355,
+                "type": "reward"
+              }
+            ]
+          },
+          "Compound V3": {
+            "name": "Compound V3",
+            "id": "scrl_compound3",
+            "value": 0.0000010445769829055998,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 3.6418744e-10,
+                "price": 2868.24,
+                "value": 0.0000010445769829055998,
+                "type": "supply"
+              }
+            ]
+          },
+          "SyncSwap": {
+            "name": "SyncSwap",
+            "id": "scrl_syncswap",
+            "value": 9.660521009196835,
+            "assets": [
+              {
+                "symbol": "USDC",
+                "amount": 1.1127392287491842,
+                "price": 1.000300090027008,
+                "value": 1.1130731506943925,
+                "type": "supply"
+              },
+              {
+                "symbol": "DAI",
+                "amount": 8.546593199182524,
+                "price": 1.0001,
+                "value": 8.547447858502442,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 17443.35304041717
       },
       "zerion": {
         "protocols": {
@@ -13211,8 +13376,23 @@
     },
     "zksync-era": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Maverick": {
+            "name": "Maverick",
+            "id": "era_maverick",
+            "value": 1.2360579318941203,
+            "assets": [
+              {
+                "symbol": "MAV",
+                "amount": 38.398817393417836,
+                "price": 0.03219,
+                "value": 1.2360579318941203,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 1.2360579318941203
       },
       "zerion": {
         "protocols": {
@@ -13239,8 +13419,44 @@
     },
     "scroll": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "iZUMi Finance": {
+            "name": "iZUMi Finance",
+            "id": "scrl_izumi",
+            "value": 0.587514651126205,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.00010483670430103333,
+                "price": 2863.06,
+                "value": 0.3001537746161165,
+                "type": "supply"
+              },
+              {
+                "symbol": "STONE",
+                "amount": 0.00009326335305345202,
+                "price": 3026.7191181414764,
+                "value": 0.2822819737088615,
+                "type": "supply"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 8.66293479571e-7,
+                "price": 2863.06,
+                "value": 0.0024802502096205473,
+                "type": "reward"
+              },
+              {
+                "symbol": "STONE",
+                "amount": 8.58570779175e-7,
+                "price": 3026.7191181414764,
+                "value": 0.002598652591606596,
+                "type": "reward"
+              }
+            ]
+          }
+        },
+        "totalValue": 0.587514651126205
       },
       "zerion": {
         "protocols": {
@@ -23025,8 +23241,345 @@
     },
     "zksync-era": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Aave V3": {
+            "name": "Aave V3",
+            "id": "era_aave3",
+            "value": 4479.417197719342,
+            "assets": [
+              {
+                "symbol": "USDT",
+                "amount": 1.054516,
+                "price": 1.00051989127477,
+                "value": 1.0550642336675053,
+                "type": "supply"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 0.03968370479389931,
+                "price": 2866.29,
+                "value": 113.74500621370565,
+                "type": "supply"
+              },
+              {
+                "symbol": "ZK",
+                "amount": 111769.9648469134,
+                "price": 0.03905,
+                "value": 4364.6171272719685,
+                "type": "supply"
+              }
+            ]
+          },
+          "Basilisk": {
+            "name": "Basilisk",
+            "id": "era_basilisk",
+            "value": 28.713459792040318,
+            "assets": [
+              {
+                "symbol": "ETH",
+                "amount": 0.010017639454500528,
+                "price": 2866.29,
+                "value": 28.713459792040318,
+                "type": "supply"
+              }
+            ]
+          },
+          "Maverick": {
+            "name": "Maverick",
+            "id": "era_maverick",
+            "value": 28.604476570824342,
+            "assets": [
+              {
+                "symbol": "MAV",
+                "amount": 884.4921636000106,
+                "price": 0.03234,
+                "value": 28.604476570824342,
+                "type": "supply"
+              }
+            ]
+          },
+          "Merkl": {
+            "name": "Merkl",
+            "id": "era_merkl",
+            "value": 6.972449242568698,
+            "assets": [
+              {
+                "symbol": "ZK",
+                "amount": 178.5518371976619,
+                "price": 0.03905,
+                "value": 6.972449242568698,
+                "type": "supply"
+              }
+            ]
+          },
+          "Koi": {
+            "name": "Koi",
+            "id": "era_muteio",
+            "value": 27.850022963848062,
+            "assets": [
+              {
+                "symbol": "MUTE",
+                "amount": 505.33116714875837,
+                "price": 0.01765698420919671,
+                "value": 8.92262443876057,
+                "type": "supply"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 0.0031162393412717945,
+                "price": 2866.29,
+                "value": 8.932045661493932,
+                "type": "supply"
+              },
+              {
+                "symbol": "MUTE",
+                "amount": 13.813073389952732,
+                "price": 0.01765698420919671,
+                "value": 0.24389721872687065,
+                "type": "reward"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 0.003402117596219046,
+                "price": 2866.29,
+                "value": 9.75145564486669,
+                "type": "reward"
+              }
+            ]
+          },
+          "Rollup Finance": {
+            "name": "Rollup Finance",
+            "id": "era_rollup",
+            "value": 0.115204588344436,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 8.309169473651466e-13,
+                "price": 2866.29,
+                "value": 2.381648937063246e-9,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDC",
+                "amount": 1.8433295154107138e-10,
+                "price": 1.000300090027008,
+                "value": 1.843882680214778e-10,
+                "type": "supply"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 0.000040192927365479,
+                "price": 2866.29,
+                "value": 0.1152045857783988,
+                "type": "reward"
+              }
+            ]
+          },
+          "SpaceFi": {
+            "name": "SpaceFi",
+            "id": "era_spacefi",
+            "value": 3.4800137521476397,
+            "assets": [
+              {
+                "symbol": "USDC",
+                "amount": 1.7388907030309615,
+                "price": 1.000300090027008,
+                "value": 1.7394125267889982,
+                "type": "supply"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 0.0006072662659251652,
+                "price": 2866.29,
+                "value": 1.7406012253586418,
+                "type": "supply"
+              }
+            ]
+          },
+          "SyncSwap": {
+            "name": "SyncSwap",
+            "id": "era_syncswap",
+            "value": 54.01281096782033,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.0005960541549698816,
+                "price": 2866.29,
+                "value": 1.708464063848622,
+                "type": "supply"
+              },
+              {
+                "symbol": "ZKINU",
+                "amount": 1554887893535.1807,
+                "price": 0,
+                "value": 0,
+                "type": "supply"
+              },
+              {
+                "symbol": "MATIC",
+                "amount": 11.622462853364334,
+                "price": 0.13824281100089986,
+                "value": 1.606721935602625,
+                "type": "supply"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 0.000560589343680372,
+                "price": 2866.29,
+                "value": 1.6068116298976136,
+                "type": "supply"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 0.0003199497246137542,
+                "price": 2866.29,
+                "value": 0.9170686961631574,
+                "type": "supply"
+              },
+              {
+                "symbol": "OT",
+                "amount": 643.2063738975259,
+                "price": 0.0014256971656709928,
+                "value": 0.9170175042072195,
+                "type": "supply"
+              },
+              {
+                "symbol": "AVAX",
+                "amount": 0.33538086556727115,
+                "price": 13.598460822242691,
+                "value": 4.560663560946379,
+                "type": "supply"
+              },
+              {
+                "symbol": "BNB",
+                "amount": 0.005482828562809329,
+                "price": 849.9,
+                "value": 4.6598559955316485,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDC",
+                "amount": 5.526188789985823,
+                "price": 1.000300090027008,
+                "value": 5.527847144129061,
+                "type": "supply"
+              },
+              {
+                "symbol": "AVAX",
+                "amount": 0.4121720416251313,
+                "price": 13.598460822242691,
+                "value": 5.604905360063132,
+                "type": "supply"
+              },
+              {
+                "symbol": "MATIC",
+                "amount": 10.475869629527764,
+                "price": 0.13824281100089986,
+                "value": 1.4482136652648736,
+                "type": "supply"
+              },
+              {
+                "symbol": "BNB",
+                "amount": 0.0017265695646879703,
+                "price": 849.9,
+                "value": 1.4674114730283059,
+                "type": "supply"
+              },
+              {
+                "symbol": "MATIC",
+                "amount": 30.357010863651578,
+                "price": 0.13824281100089986,
+                "value": 4.196638515376049,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDC",
+                "amount": 4.065759843801099,
+                "price": 1.000300090027008,
+                "value": 4.066979937782434,
+                "type": "supply"
+              },
+              {
+                "symbol": "MATIC",
+                "amount": 13.866481667409646,
+                "price": 0.13824281100089986,
+                "value": 1.9169414043951545,
+                "type": "supply"
+              },
+              {
+                "symbol": "AVAX",
+                "amount": 0.12034520436331826,
+                "price": 13.598460822242691,
+                "value": 1.6365095466793735,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDC",
+                "amount": 0.7621307007742908,
+                "price": 1.000300090027008,
+                "value": 0.7623594085968698,
+                "type": "supply"
+              },
+              {
+                "symbol": "OT",
+                "amount": 539.753202944307,
+                "price": 0.0014256971656709928,
+                "value": 0.7695246115995387,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDC",
+                "amount": 5.32149549532534,
+                "price": 1.000300090027008,
+                "value": 5.323092423052255,
+                "type": "supply"
+              },
+              {
+                "symbol": "BNB",
+                "amount": 0.006254599472474432,
+                "price": 849.9,
+                "value": 5.31578409165602,
+                "type": "supply"
+              }
+            ]
+          },
+          "UniDex Exchange": {
+            "name": "UniDex Exchange",
+            "id": "era_unidex",
+            "value": 0.6566728437179647,
+            "assets": [
+              {
+                "symbol": "USDC",
+                "amount": 0.6564732371340736,
+                "price": 1.000300090027008,
+                "value": 0.6566702382055352,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDC",
+                "amount": 0.000002604730775893,
+                "price": 1.000300090027008,
+                "value": 0.0000026055124296218865,
+                "type": "reward"
+              }
+            ]
+          },
+          "XY Finance": {
+            "name": "XY Finance",
+            "id": "era_xyfinance",
+            "value": 1.0491923000816445,
+            "assets": [
+              {
+                "symbol": "USDC",
+                "amount": 1.0488775423916201,
+                "price": 1.000300090027008,
+                "value": 1.0491923000816445,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 4630.871500740737
       },
       "zerion": {
         "protocols": {
@@ -23486,8 +24039,121 @@
     },
     "scroll": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Ambient": {
+            "name": "Ambient",
+            "id": "scrl_ambient",
+            "value": 652.623245240019,
+            "assets": [
+              {
+                "symbol": "ETH",
+                "amount": 0,
+                "price": 2866.29,
+                "value": 0,
+                "type": "supply"
+              },
+              {
+                "symbol": "SCR",
+                "amount": 5356.11912566032,
+                "price": 0.096,
+                "value": 514.1874360633907,
+                "type": "supply"
+              },
+              {
+                "symbol": "ETH",
+                "amount": 0.02399477849659265,
+                "price": 2866.29,
+                "value": 68.77599365699855,
+                "type": "reward"
+              },
+              {
+                "symbol": "SCR",
+                "amount": 725.6230783294762,
+                "price": 0.096,
+                "value": 69.65981551962972,
+                "type": "reward"
+              }
+            ]
+          },
+          "Compound V3": {
+            "name": "Compound V3",
+            "id": "scrl_compound3",
+            "value": 4.170104370311093,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.003,
+                "price": 2866.29,
+                "value": 8.59887,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDC",
+                "amount": 4.427437,
+                "price": 1.000300090027008,
+                "value": -4.428765629688907,
+                "type": "borrow"
+              }
+            ]
+          },
+          "PunkSwap": {
+            "name": "PunkSwap",
+            "id": "scrl_punkswap",
+            "value": 26.923791903038584,
+            "assets": [
+              {
+                "symbol": "PUNK",
+                "amount": 7182.9797672456125,
+                "price": 0.0002759954127381845,
+                "value": 1.9824694655509814,
+                "type": "supply"
+              },
+              {
+                "symbol": "PUNK",
+                "amount": 46927.32709498265,
+                "price": 0.0002759954127381845,
+                "value": 12.951727010279525,
+                "type": "reward"
+              },
+              {
+                "symbol": "PUNK",
+                "amount": 3673.0542877567436,
+                "price": 0.0002759954127381845,
+                "value": 1.013746134159181,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDT",
+                "amount": 1.0033362303526532,
+                "price": 0.99946,
+                "value": 1.0027944287882629,
+                "type": "supply"
+              },
+              {
+                "symbol": "PUNK",
+                "amount": 36134.85733446337,
+                "price": 0.0002759954127381845,
+                "value": 9.973054864260632,
+                "type": "reward"
+              }
+            ]
+          },
+          "Tempest": {
+            "name": "Tempest",
+            "id": "scrl_tempest",
+            "value": 7.85461401885823,
+            "assets": [
+              {
+                "symbol": "SCR",
+                "amount": 81.81889602977323,
+                "price": 0.096,
+                "value": 7.85461401885823,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 691.5717555322268
       },
       "zerion": {
         "protocols": {
@@ -32108,8 +32774,58 @@
     },
     "zksync-era": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "PancakeSwap V3": {
+            "name": "PancakeSwap V3",
+            "id": "era_pancakeswap3",
+            "value": 0.0008535707258020646,
+            "assets": [
+              {
+                "symbol": "ZK",
+                "amount": 0.02128297823915293,
+                "price": 0.03905,
+                "value": 0.000831100300238922,
+                "type": "supply"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 0,
+                "price": 2866.2,
+                "value": 0,
+                "type": "supply"
+              },
+              {
+                "symbol": "ZK",
+                "amount": 0.000142747123626629,
+                "price": 0.03905,
+                "value": 0.000005574275177619862,
+                "type": "reward"
+              },
+              {
+                "symbol": "WETH",
+                "amount": 5.894965594e-9,
+                "price": 2866.2,
+                "value": 0.0000168961503855228,
+                "type": "reward"
+              }
+            ]
+          },
+          "WOO Network": {
+            "name": "WOO Network",
+            "id": "era_woo",
+            "value": 0.002897536918116653,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.0000010109332628974438,
+                "price": 2866.2,
+                "value": 0.002897536918116653,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 0.003751107643918718
       },
       "zerion": {
         "protocols": {
@@ -32183,8 +32899,79 @@
     },
     "scroll": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Compound V3": {
+            "name": "Compound V3",
+            "id": "scrl_compound3",
+            "value": 0.0000012014955711185998,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 4.19194603e-10,
+                "price": 2866.2,
+                "value": 0.0000012014955711185998,
+                "type": "supply"
+              }
+            ]
+          },
+          "LayerBank": {
+            "name": "LayerBank",
+            "id": "scrl_lineabank",
+            "value": 0.0028948422012834616,
+            "assets": [
+              {
+                "symbol": "ETH",
+                "amount": 0.0000010099930923464733,
+                "price": 2866.2,
+                "value": 0.0028948422012834616,
+                "type": "supply"
+              }
+            ]
+          },
+          "SpaceFi": {
+            "name": "SpaceFi",
+            "id": "scrl_spacefi",
+            "value": 0.3689419358502745,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.00006453421435863587,
+                "price": 2866.2,
+                "value": 0.1849679651947221,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDT",
+                "amount": 0.18407337027550116,
+                "price": 0.99946,
+                "value": 0.1839739706555524,
+                "type": "supply"
+              }
+            ]
+          },
+          "Zada Finance": {
+            "name": "Zada Finance",
+            "id": "scrl_zadafinance",
+            "value": 2.003776679133644,
+            "assets": [
+              {
+                "symbol": "USDC",
+                "amount": 1.0019051506799173,
+                "price": 1.000300090027008,
+                "value": 1.0022058124236444,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDT",
+                "amount": 1.0021120071938845,
+                "price": 0.99946,
+                "value": 1.0015708667099998,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 2.375614658680773
       },
       "zerion": {
         "protocols": {
@@ -44583,8 +45370,72 @@
     },
     "zksync-era": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Merkl": {
+            "name": "Merkl",
+            "id": "era_merkl",
+            "value": 0,
+            "assets": [
+              {
+                "symbol": "aglaMerkl",
+                "amount": 0.001675,
+                "price": 0,
+                "value": 0,
+                "type": "supply"
+              }
+            ]
+          },
+          "ReactorFusion": {
+            "name": "ReactorFusion",
+            "id": "era_reactorfusion",
+            "value": 13454.203883065811,
+            "assets": [
+              {
+                "symbol": "ZK",
+                "amount": 12533.196811374466,
+                "price": 0.03899,
+                "value": 488.6693436754904,
+                "type": "supply"
+              },
+              {
+                "symbol": "ETH",
+                "amount": 4.5258869148757555,
+                "price": 2864.75,
+                "value": 12965.53453939032,
+                "type": "supply"
+              }
+            ]
+          },
+          "WOO Network": {
+            "name": "WOO Network",
+            "id": "era_woo",
+            "value": 289.6084042356856,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.10109377929511672,
+                "price": 2864.75,
+                "value": 289.6084042356856,
+                "type": "supply"
+              }
+            ]
+          },
+          "ZeroLend": {
+            "name": "ZeroLend",
+            "id": "era_zerolend",
+            "value": 181.38098349130266,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.06331476865042418,
+                "price": 2864.75,
+                "value": 181.38098349130266,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 13925.193270792799
       },
       "zerion": {
         "protocols": {
@@ -44672,8 +45523,79 @@
     },
     "scroll": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "Aave V3": {
+            "name": "Aave V3",
+            "id": "scrl_aave3",
+            "value": 487988.8107922156,
+            "assets": [
+              {
+                "symbol": "USDC",
+                "amount": 214.63503,
+                "price": 1.000300090027008,
+                "value": 214.69943983194958,
+                "type": "supply"
+              },
+              {
+                "symbol": "weETH",
+                "amount": 156.9290785764589,
+                "price": 3108.245557656356,
+                "value": 487774.1113523836,
+                "type": "supply"
+              }
+            ]
+          },
+          "Ambient": {
+            "name": "Ambient",
+            "id": "scrl_ambient",
+            "value": 886.4294483372647,
+            "assets": [
+              {
+                "symbol": "ETH",
+                "amount": 0.21937082860869964,
+                "price": 2862.22,
+                "value": 627.8875730603922,
+                "type": "supply"
+              },
+              {
+                "symbol": "wrsETH",
+                "amount": 0.08463303279336572,
+                "price": 3017.735603094251,
+                "value": 255.400116258383,
+                "type": "supply"
+              },
+              {
+                "symbol": "ETH",
+                "amount": 0.000549048542771216,
+                "price": 2862.22,
+                "value": 1.5714977200906297,
+                "type": "reward"
+              },
+              {
+                "symbol": "wrsETH",
+                "amount": 0.000520344226574646,
+                "price": 3017.735603094251,
+                "value": 1.570261298398851,
+                "type": "reward"
+              }
+            ]
+          },
+          "Compound V3": {
+            "name": "Compound V3",
+            "id": "scrl_compound3",
+            "value": 7.15555,
+            "assets": [
+              {
+                "symbol": "WETH",
+                "amount": 0.0025,
+                "price": 2862.22,
+                "value": 7.15555,
+                "type": "supply"
+              }
+            ]
+          }
+        },
+        "totalValue": 488882.39579055284
       },
       "zerion": {
         "protocols": {
@@ -46245,8 +47167,44 @@
     },
     "zksync-era": {
       "debank": {
-        "protocols": {},
-        "totalValue": 0
+        "protocols": {
+          "ReactorFusion": {
+            "name": "ReactorFusion",
+            "id": "era_reactorfusion",
+            "value": 1.3393564814135153,
+            "assets": [
+              {
+                "symbol": "USDC",
+                "amount": 0.019471052165787595,
+                "price": 1.000300090027008,
+                "value": 0.019476895234357902,
+                "type": "supply"
+              },
+              {
+                "symbol": "ETH",
+                "amount": 0.0006070063895246194,
+                "price": 2868.4,
+                "value": 1.7411371277124184,
+                "type": "supply"
+              },
+              {
+                "symbol": "USDC",
+                "amount": 0.390226,
+                "price": 1.000300090027008,
+                "value": -0.39034310293087926,
+                "type": "borrow"
+              },
+              {
+                "symbol": "ETH",
+                "amount": 0.000010777589806994,
+                "price": 2868.4,
+                "value": -0.030914438602381588,
+                "type": "borrow"
+              }
+            ]
+          }
+        },
+        "totalValue": 1.3393564814135153
       },
       "zerion": {
         "protocols": {
