@@ -8534,9 +8534,9 @@
               }
             ]
           },
-          "Velodrome": {
-            "name": "Velodrome",
-            "id": "Velodrome",
+          "Velodrome V2": {
+            "name": "Velodrome V2",
+            "id": "Velodrome V2",
             "value": 0.047090331107867124,
             "assets": [
               {
@@ -11884,9 +11884,9 @@
               }
             ]
           },
-          "Velodrome": {
-            "name": "Velodrome",
-            "id": "Velodrome",
+          "Velodrome V2": {
+            "name": "Velodrome V2",
+            "id": "Velodrome V2",
             "value": 0.11604569114150991,
             "assets": [
               {
@@ -17596,9 +17596,9 @@
               }
             ]
           },
-          "ParaSwap": {
-            "name": "ParaSwap",
-            "id": "ParaSwap",
+          "Velora": {
+            "name": "Velora",
+            "id": "Velora",
             "value": 679.6693736806707,
             "assets": [
               {
@@ -20685,9 +20685,9 @@
       },
       "zerion": {
         "protocols": {
-          "Velodrome": {
-            "name": "Velodrome",
-            "id": "Velodrome",
+          "Velodrome V2": {
+            "name": "Velodrome V2",
+            "id": "Velodrome V2",
             "value": 13321.755694043173,
             "assets": [
               {
@@ -29624,9 +29624,9 @@
               }
             ]
           },
-          "Velodrome": {
-            "name": "Velodrome",
-            "id": "Velodrome",
+          "Velodrome V2": {
+            "name": "Velodrome V2",
+            "id": "Velodrome V2",
             "value": 0.01650221188651626,
             "assets": [
               {

@@ -35,10 +35,11 @@ const PROTOCOL_NAME_MAP = {
     'Spool': 'Yelay',
     'Euler v2': 'Euler',
     'Compound V2': 'Compound',
-    'MakerDAO': 'Maker'
+    'MakerDAO': 'Maker',
+    'ParaSwap': 'Velora',
   },
   'optimism': {
-    'Velodrome': 'Velodrome  V2'
+    'Velodrome': 'Velodrome V2',
   }
 };
 

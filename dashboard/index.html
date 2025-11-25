@@ -312,6 +312,20 @@
             </div>
           </div>
 
+          <!-- Global Warnings -->
+          <div v-if="globalWarnings.length > 0" class="alert alert-info mb-4">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fas fa-info-circle me-2 text-info"></i>
+              <h6 class="mb-0 fw-bold">已知问题 (Known Issues)</h6>
+            </div>
+            <ul class="mb-0 ps-3 small">
+              <li v-for="(w, idx) in globalWarnings" :key="idx">
+                <span class="badge bg-dark me-1">{{ formatChain(w.chain) }}</span>
+                <strong>{{ w.name }}:</strong> {{ w.msg }}
+              </li>
+            </ul>
+          </div>
+
           <!-- Comparison List -->
           <div v-if="filteredRows.length === 0" class="empty-state">
             <i class="fas fa-check-circle fa-3x mb-3 text-success opacity-50"></i>
@@ -486,7 +500,25 @@
           if (!this.showOnlyDiffs) return this.allProtocols;
 
           return this.allProtocols.filter(proto => {
+            // Skip if it's a known warning (handled globally)
+            if (proto.isWarning) return false;
             return proto.assets.some(a => a.hasDiff);
+          });
+        },
+        globalWarnings() {
+          // Collect all protocols with warnings from the current list
+          return this.allProtocols.filter(p => p.isWarning).map(p => {
+            const warnings = {
+              'lido': 'Zerion 将 Lido 显示为 wstETH',
+              'ether.fi': 'Zerion 将 Ethers.fi 显示为 weETH',
+              'rocket pool': 'Zerion 将 Rocket Pool 显示为 rETH',
+              'polymarket': '数据源链不同'
+            };
+            return {
+              chain: p.chain,
+              name: p.name,
+              msg: warnings[p.name.toLowerCase()]
+            };
           });
         },
         totals() {
@@ -538,7 +570,22 @@
             }
           });
 
+          // Global Warning check helper
+          const isKnownWarning = (protoName) => {
+            const warnings = ['lido', 'ethers.fi', 'polymarket', 'rocket pool', 'ether.fi'];
+            return warnings.includes(protoName.toLowerCase());
+          };
+
           return Object.values(protocolsMap).map(proto => {
+            // Check for known warnings immediately
+            if (isKnownWarning(proto.name)) {
+              proto.hasDiff = false; // Force no diff for main list
+              proto.assets.forEach(a => a.hasDiff = false);
+              proto.isWarning = true; // Mark as warning for global list
+            } else {
+              proto.isWarning = false;
+            }
+
             // Consolidate assets by symbol to handle type mismatches (e.g. supply vs locked)
             // If amounts are similar, merge them.
             // First, collect all assets into a flat list
@@ -710,43 +757,51 @@
 
             // --- Fiat Dimension Override Logic ---
             if (this.compareMode === 'fiat') {
-              const totalD = proto.debankTotal;
-              const totalZ = proto.zerionTotal;
-              const totalDiff = Math.abs(totalD - totalZ);
-              const totalMax = Math.max(Math.abs(totalD), Math.abs(totalZ)) || 1;
-              const totalDiffPct = totalDiff / totalMax;
-
-              if (totalDiff <= 1 || totalDiffPct <= 0.01) {
-                // Protocol matches in Fiat Dimension!
-                // Clear all diffs
-                proto.assets.forEach(a => a.hasDiff = false);
+              if (proto.isWarning) {
+                // Already handled
               } else {
-                // Protocol differs. Highlight assets based on Value Diff.
-                proto.assets.forEach(a => {
-                  // Check quantity consistency first (Same as Token Mode logic)
-                  const amtD = a.debank ? a.debank.amount : 0;
-                  const amtZ = a.zerion ? a.zerion.amount : 0;
-                  const roundedD = Number(amtD.toFixed(2));
-                  const roundedZ = Number(amtZ.toFixed(2));
+                const totalD = proto.debankTotal;
+                const totalZ = proto.zerionTotal;
+                const totalDiff = Math.abs(totalD - totalZ);
+                const totalMax = Math.max(Math.abs(totalD), Math.abs(totalZ)) || 1;
+                const totalDiffPct = totalDiff / totalMax;
 
-                  if (roundedD === roundedZ) {
-                    a.hasDiff = false;
-                    return;
-                  }
+                if (totalDiff <= 1 || totalDiffPct <= 0.01) {
+                  // Protocol matches in Fiat Dimension!
+                  // Clear all diffs
+                  proto.assets.forEach(a => a.hasDiff = false);
+                  proto.hasDiff = false; // Ensure protocol level is cleared
+                } else {
+                  // Protocol differs. Highlight assets based on Value Diff.
+                  // Set protocol hasDiff to true
+                  proto.hasDiff = true;
 
-                  const valD = a.debank?.value || 0;
-                  const valZ = a.zerion?.value || 0;
-                  const valDiff = Math.abs(valD - valZ);
-                  const valMax = Math.max(Math.abs(valD), Math.abs(valZ)) || 1;
-                  const valDiffPct = valDiff / valMax;
+                  proto.assets.forEach(a => {
+                    // Check quantity consistency first (Same as Token Mode logic)
+                    const amtD = a.debank ? a.debank.amount : 0;
+                    const amtZ = a.zerion ? a.zerion.amount : 0;
+                    const roundedD = Number(amtD.toFixed(2));
+                    const roundedZ = Number(amtZ.toFixed(2));
 
-                  // Mark as diff if value diff is significant
-                  if (valDiff > 1 && valDiffPct > 0.01) {
-                    a.hasDiff = true;
-                  } else {
-                    a.hasDiff = false;
-                  }
-                });
+                    if (roundedD === roundedZ) {
+                      a.hasDiff = false;
+                      return;
+                    }
+
+                    const valD = a.debank?.value || 0;
+                    const valZ = a.zerion?.value || 0;
+                    const valDiff = Math.abs(valD - valZ);
+                    const valMax = Math.max(Math.abs(valD), Math.abs(valZ)) || 1;
+                    const valDiffPct = valDiff / valMax;
+
+                    // Mark as diff if value diff is significant
+                    if (valDiff > 1 && valDiffPct > 0.01) {
+                      a.hasDiff = true;
+                    } else {
+                      a.hasDiff = false;
+                    }
+                  });
+                }
               }
             }
             // -------------------------------------
