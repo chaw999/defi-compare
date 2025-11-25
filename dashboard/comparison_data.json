@@ -2626,9 +2626,9 @@
               }
             ]
           },
-          "Euler v2": {
-            "name": "Euler v2",
-            "id": "Euler v2",
+          "Euler": {
+            "name": "Euler",
+            "id": "Euler",
             "value": 217.83591515438852,
             "assets": [
               {
@@ -2660,9 +2660,9 @@
               }
             ]
           },
-          "Morpho Blue": {
-            "name": "Morpho Blue",
-            "id": "Morpho Blue",
+          "Morpho": {
+            "name": "Morpho",
+            "id": "Morpho",
             "value": 216.19681709699844,
             "assets": [
               {
@@ -3591,9 +3591,9 @@
               }
             ]
           },
-          "Helio": {
-            "name": "Helio",
-            "id": "Helio",
+          "Lista DAO": {
+            "name": "Lista DAO",
+            "id": "Lista DAO",
             "value": 34166770.71790773,
             "assets": [
               {
@@ -5255,9 +5255,9 @@
       },
       "zerion": {
         "protocols": {
-          "Euler v2": {
-            "name": "Euler v2",
-            "id": "Euler v2",
+          "Euler": {
+            "name": "Euler",
+            "id": "Euler",
             "value": 47180239.17019961,
             "assets": [
               {
@@ -5868,9 +5868,9 @@
               }
             ]
           },
-          "Compound V2": {
-            "name": "Compound V2",
-            "id": "Compound V2",
+          "Compound": {
+            "name": "Compound",
+            "id": "Compound",
             "value": 6.083007374706816,
             "assets": [
               {
@@ -7386,9 +7386,9 @@
               }
             ]
           },
-          "Morpho Blue": {
-            "name": "Morpho Blue",
-            "id": "Morpho Blue",
+          "Morpho": {
+            "name": "Morpho",
+            "id": "Morpho",
             "value": 3082.9245140253124,
             "assets": [
               {
@@ -15659,9 +15659,9 @@
               }
             ]
           },
-          "Euler v2": {
-            "name": "Euler v2",
-            "id": "Euler v2",
+          "Euler": {
+            "name": "Euler",
+            "id": "Euler",
             "value": 518683.39836284454,
             "assets": [
               {
@@ -18053,9 +18053,9 @@
               }
             ]
           },
-          "Compound V2": {
-            "name": "Compound V2",
-            "id": "Compound V2",
+          "Compound": {
+            "name": "Compound",
+            "id": "Compound",
             "value": 16.209508662657413,
             "assets": [
               {
@@ -25115,9 +25115,9 @@
               }
             ]
           },
-          "Compound V2": {
-            "name": "Compound V2",
-            "id": "Compound V2",
+          "Compound": {
+            "name": "Compound",
+            "id": "Compound",
             "value": 0.19842566539709516,
             "assets": [
               {
@@ -26324,9 +26324,9 @@
               }
             ]
           },
-          "Helio": {
-            "name": "Helio",
-            "id": "Helio",
+          "Lista DAO": {
+            "name": "Lista DAO",
+            "id": "Lista DAO",
             "value": 0.000005048591092515029,
             "assets": [
               {
@@ -34547,9 +34547,9 @@
       },
       "zerion": {
         "protocols": {
-          "Morpho Blue": {
-            "name": "Morpho Blue",
-            "id": "Morpho Blue",
+          "Morpho": {
+            "name": "Morpho",
+            "id": "Morpho",
             "value": 32544778.10238408,
             "assets": [
               {
@@ -35713,9 +35713,9 @@
               }
             ]
           },
-          "Compound V2": {
-            "name": "Compound V2",
-            "id": "Compound V2",
+          "Compound": {
+            "name": "Compound",
+            "id": "Compound",
             "value": 12848.900937535007,
             "assets": [
               {
@@ -36415,9 +36415,9 @@
               }
             ]
           },
-          "Euler v2": {
-            "name": "Euler v2",
-            "id": "Euler v2",
+          "Euler": {
+            "name": "Euler",
+            "id": "Euler",
             "value": 2242.6048523979357,
             "assets": [
               {

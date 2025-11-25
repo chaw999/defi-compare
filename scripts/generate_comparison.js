@@ -24,6 +24,18 @@ const CHAIN_MAP = {
 // DeBank uses: eth, bsc, matic, ftm, avax, op, arb, base, linea, scroll, zksync (maybe?)
 // Let's just rely on the filename in the data directory if possible, or the content.
 
+// Protocol Name Mapping (Zerion -> DeBank)
+const PROTOCOL_NAME_MAP = {
+  'binance-smart-chain': {
+    'Helio': 'Lista DAO'
+  },
+  'ethereum': {
+    'Morpho Blue': 'Morpho',
+    'Euler v2': 'Euler',
+    'Compound V2': 'Compound'
+  }
+};
+
 function getDirectories(srcPath) {
   return fs.readdirSync(srcPath).filter(file => fs.statSync(path.join(srcPath, file)).isDirectory());
 }
@@ -109,7 +121,7 @@ function normalizeDeBank(chainData) {
 }
 
 // Normalize Zerion Protocol Data
-function normalizeZerion(chainDataRaw) {
+function normalizeZerion(chainDataRaw, chainId) {
   const protocols = {};
   let totalValue = 0;
 
@@ -126,15 +138,14 @@ function normalizeZerion(chainDataRaw) {
     if (!attrs) return;
 
     // Filter out wallet assets (Protocol is null)
-    // if (!attrs.protocol) return; 
-    // User wants "Protocol" comparison. Wallet assets in Zerion have protocol=null.
-    // DeBank usually separates "Wallet" from "Protocols". 
-    // Let's group null protocol as "Wallet" for Zerion to see if DeBank has equivalent?
-    // DeBank usually DOES NOT return wallet balances in the `complex_protocol_list` endpoint.
-    // So let's skip protocol=null for apples-to-apples protocol comparison.
     if (!attrs.protocol) return;
 
-    const protoName = attrs.protocol;
+    let protoName = attrs.protocol;
+
+    // Apply Protocol Name Mapping
+    if (chainId && PROTOCOL_NAME_MAP[chainId] && PROTOCOL_NAME_MAP[chainId][protoName]) {
+      protoName = PROTOCOL_NAME_MAP[chainId][protoName];
+    }
 
     if (!protocols[protoName]) {
       protocols[protoName] = {
@@ -201,7 +212,7 @@ function main() {
 
       result[address][zerionChainId] = {
         debank: normalizeDeBank(debankDataRaw),
-        zerion: normalizeZerion(zerionDataRaw || [])
+        zerion: normalizeZerion(zerionDataRaw || [], zerionChainId)
       };
     });
   });

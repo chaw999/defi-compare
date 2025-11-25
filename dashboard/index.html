@@ -245,15 +245,13 @@
             <div v-if="showOnlyDiffs" class="d-flex align-items-center gap-3 bg-light rounded px-2 py-1 border">
               <div class="form-check form-check-inline m-0">
                 <input class="form-check-input" type="radio" id="compareModeFiat" value="fiat" v-model="compareMode">
-                <label class="form-check-label small fw-bold" for="compareModeFiat" 
-                       title="法币金额相差在 1% 或 1 美金以内认为相同">
+                <label class="form-check-label small fw-bold" for="compareModeFiat" title="法币金额相差在 1% 或 1 美金以内认为相同">
                   法币维度
                 </label>
               </div>
               <div class="form-check form-check-inline m-0">
                 <input class="form-check-input" type="radio" id="compareModeToken" value="token" v-model="compareMode">
-                <label class="form-check-label small fw-bold" for="compareModeToken" 
-                       title="完整对比代币数量名称一一对应的关系">
+                <label class="form-check-label small fw-bold" for="compareModeToken" title="完整对比代币数量名称一一对应的关系">
                   代币维度
                 </label>
               </div>
@@ -327,7 +325,7 @@
               <div class="d-flex align-items-center gap-2">
                 <span class="badge bg-dark text-white me-2" v-if="proto.chain">{{ formatChain(proto.chain) }}</span>
                 <h5 class="mb-0 fw-bold text-dark">{{ proto.name }}</h5>
-                
+
                 <!-- Status Badge -->
                 <span v-if="getProtocolStatus(proto)" class="badge ms-2" :class="getProtocolStatus(proto).class">
                   {{ getProtocolStatus(proto).text }}
@@ -693,7 +691,7 @@
             proto.assets = finalAssets.sort((a, b) => (b.debank?.value || b.zerion?.value || 0) - (a.debank?.value || a.zerion?.value || 0));
 
             proto.debankTotal = proto.debank ? proto.debank.value : 0;
-            
+
             // Calculate Zerion Total (Net Value = Supply - Borrow)
             // User request: "If loan type, subtract from total"
             let zNetTotal = 0;
@@ -725,6 +723,17 @@
               } else {
                 // Protocol differs. Highlight assets based on Value Diff.
                 proto.assets.forEach(a => {
+                  // Check quantity consistency first (Same as Token Mode logic)
+                  const amtD = a.debank ? a.debank.amount : 0;
+                  const amtZ = a.zerion ? a.zerion.amount : 0;
+                  const roundedD = Number(amtD.toFixed(2));
+                  const roundedZ = Number(amtZ.toFixed(2));
+
+                  if (roundedD === roundedZ) {
+                    a.hasDiff = false;
+                    return;
+                  }
+
                   const valD = a.debank?.value || 0;
                   const valZ = a.zerion?.value || 0;
                   const valDiff = Math.abs(valD - valZ);
@@ -785,7 +794,7 @@
         },
         getProtocolStatus(proto) {
           if (!proto || !proto.assets || proto.assets.length === 0) return null;
-          
+
           const total = proto.assets.length;
           const diffs = proto.assets.filter(a => a.hasDiff).length;
 
