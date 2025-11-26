@@ -44,8 +44,31 @@ const PROTOCOL_NAME_MAP = {
   }
 };
 
+// Target addresses from dashboard/index.html addressOrder
+const TARGET_ADDRESSES = [
+  "0x9d17bb55b57b31329cf01aa7017948e398b277bc",
+  "0x5c9e30def85334e587cf36eb07bdd6a72bf1452d",
+  "0xd92293daca6bbed57f8cb6d498b48ea93e035e99",
+  "0x15b325660a1C4a9582a7d834C31119C0CB9e3A42",
+  "0x47441bd9fb3441370cb5b6c4684a0104353aec66",
+  "0x011b0a055e02425461a1ae95b30f483c4ff05be7",
+  "0x0b32aa5c1e71715206fe29b7badb21ad95f272c0",
+  "0x87f16c31e32ae543278f5194cf94862f1cb1eee0",
+  "0xbbbc35dfac3a00a03a8fde3540eca4f0e15c5e64",
+  "0x4e5ed30e3b4eb39abce3c150f31e180a3ae5806e",
+  "0x84a6a7c0674a3aa03e09c026600cb46181821f07",
+  "0x5c051c0ff69b6f5fdd47e847eb370dd48726ec4d",
+  "0x7bfee91193d9df2ac0bfe90191d40f23c773c060",
+  "0xde6b2a06407575b98724818445178c1f5fd53361",
+  "0xbdfa4f4492dd7b7cf211209c4791af8d52bf5c50",
+  "0x33eecc48943aaeabb5328a25ff28eb85f67945c2",
+  "0x3e8734ec146c981e3ed1f6b582d447dde701d90c"
+].map(addr => addr.toLowerCase());
+
 function getDirectories(srcPath) {
-  return fs.readdirSync(srcPath).filter(file => fs.statSync(path.join(srcPath, file)).isDirectory());
+  return fs.readdirSync(srcPath).filter(file => {
+    return fs.statSync(path.join(srcPath, file)).isDirectory();
+  });
 }
 
 function readJson(filePath) {
@@ -209,7 +232,13 @@ function normalizeZerion(chainDataRaw, chainId) {
 }
 
 function main() {
-  const addresses = getDirectories(DATA_DIR_DEBANK);
+  let addresses = getDirectories(DATA_DIR_DEBANK);
+  
+  // Filter addresses based on TARGET_ADDRESSES
+  if (TARGET_ADDRESSES.length > 0) {
+    addresses = addresses.filter(addr => TARGET_ADDRESSES.includes(addr.toLowerCase()));
+  }
+
   const result = {};
 
   addresses.forEach(address => {
