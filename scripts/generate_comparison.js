@@ -225,12 +225,12 @@ function main() {
       // Only process if at least one exists
       if (!fs.existsSync(debankFile) && !fs.existsSync(zerionFile)) return;
 
-      const debankDataRaw = readJson(debankFile);
-      const zerionDataRaw = readJson(zerionFile);
+      const debankDataRaw = readJson(debankFile) || []; // Default to empty array if missing
+      const zerionDataRaw = readJson(zerionFile) || []; // Default to empty array if missing
 
       result[address][zerionChainId] = {
         debank: normalizeDeBank(debankDataRaw),
-        zerion: normalizeZerion(zerionDataRaw || [], zerionChainId)
+        zerion: normalizeZerion(zerionDataRaw, zerionChainId)
       };
     });
   });
