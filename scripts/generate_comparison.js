@@ -40,6 +40,7 @@ const PROTOCOL_NAME_MAP = {
   },
   'optimism': {
     'Velodrome': 'Velodrome V2',
+    'Velodrome V2': 'Velodrome',
   }
 };
 
